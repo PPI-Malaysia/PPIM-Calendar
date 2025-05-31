@@ -1,6 +1,7 @@
 // Global variables to store calendar data
 let eventDates = [];
 let eventData = [];
+let activeEventData = []; // New variable for active events
 let calendarInstance = null;
 let isShowingAllEvents = false;
 let currentSelectedDate = null;
@@ -37,9 +38,11 @@ async function fetchCalendarData() {
         if (data.success) {
             eventDates = data.data.event_dates || [];
             eventData = data.data.events || [];
+            activeEventData = data.data.active_events || []; // Store active events
             console.log("Calendar data loaded:", {
                 totalEventDates: eventDates.length,
                 totalEvents: eventData.length,
+                activeEvents: activeEventData.length,
             });
         } else {
             console.error("Failed to fetch calendar data:", data);
@@ -49,6 +52,7 @@ async function fetchCalendarData() {
         // Fallback to empty arrays if API fails
         eventDates = [];
         eventData = [];
+        activeEventData = [];
     }
 }
 
@@ -276,6 +280,7 @@ function selectSmallDate(dateString) {
 
 function updateSmallEventDisplay(selectedDate) {
     const events = getEventsForDate(selectedDate);
+    const activeEvents = getActiveEventsForDate(selectedDate); // Use date-specific active events
     const titleElement = document.getElementById("smallEventsTitle");
     const contentElement = document.getElementById("smallEventsContent");
 
@@ -286,11 +291,73 @@ function updateSmallEventDisplay(selectedDate) {
 
     // Update the content
     if (contentElement) {
-        if (events.length === 0) {
-            contentElement.innerHTML =
+        let eventsHTML = "";
+
+        // Add active events section if there are any for this date
+        if (activeEvents.length > 0) {
+            eventsHTML += `
+                <div class="small-active-events-section">
+                    <div class="small-active-events-header">
+                        <h6>Currently Active Events</h6>
+                    </div>
+                    <div class="small-active-events-content">
+                        ${activeEvents
+                            .map((event) => {
+                                const startTime = formatTime(event.start);
+                                const endTime = formatTime(event.end);
+
+                                // Map class names to our CSS classes
+                                let eventClass = "active"; // Special class for active events
+                                if (event.class_name.includes("success")) {
+                                    eventClass += " online-offline";
+                                } else if (event.class_name.includes("info")) {
+                                    eventClass += " meeting";
+                                } else if (
+                                    event.class_name.includes("warning")
+                                ) {
+                                    eventClass += " deadline";
+                                } else if (
+                                    event.class_name.includes("danger")
+                                ) {
+                                    eventClass += " important";
+                                } else {
+                                    eventClass += " other";
+                                }
+
+                                return `
+                                <div class="small-event-item ${eventClass}">
+                                    <div class="small-event-item-title">${event.title} (Ongoing)</div>
+                                    <div class="small-event-item-time">${startTime} - ${endTime}</div>
+                                </div>
+                            `;
+                            })
+                            .join("")}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Add regular events for the selected date
+        if (events.length === 0 && activeEvents.length === 0) {
+            // Only show "no events" if there are no regular events AND no active events for this date
+            eventsHTML +=
                 '<div class="no-events-small">No events scheduled for this date.</div>';
         } else {
-            contentElement.innerHTML = events
+            if (activeEvents.length > 0 && events.length > 0) {
+                // Only show this header if there are both active events and regular events
+                eventsHTML += `
+                    <div class="small-date-events-section">
+                        <div class="small-date-events-header">
+                            <h6>Events for ${formatDateForDisplay(
+                                selectedDate
+                            )}</h6>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Add regular events
+            eventsHTML += events
                 .map((event) => {
                     const startTime = formatTime(event.start);
                     const endTime = formatTime(event.end);
@@ -316,6 +383,8 @@ function updateSmallEventDisplay(selectedDate) {
                 })
                 .join("");
         }
+
+        contentElement.innerHTML = eventsHTML;
     }
 }
 
@@ -369,6 +438,7 @@ function showSmallAllEventsFromToday() {
     // Sort events by date and time
     upcomingEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
 
+    const activeEvents = getActiveEvents();
     const titleElement = document.getElementById("smallEventsTitle");
     const contentElement = document.getElementById("smallEventsContent");
 
@@ -379,9 +449,57 @@ function showSmallAllEventsFromToday() {
 
     // Update the content
     if (contentElement) {
+        let allEventsHTML = "";
+
+        // Add active events section if there are any
+        if (activeEvents.length > 0) {
+            allEventsHTML += `
+                <div class="small-all-events-date-group">
+                    <div class="small-all-events-date-header">
+                        <h6>Currently Active Events</h6>
+                    </div>
+                    <div class="small-all-events-date-content">
+                        ${activeEvents
+                            .map((event) => {
+                                const startTime = formatTime(event.start);
+                                const endTime = formatTime(event.end);
+
+                                // Map class names to our CSS classes
+                                let eventClass = "active"; // Special class for active events
+                                if (event.class_name.includes("success")) {
+                                    eventClass += " online-offline";
+                                } else if (event.class_name.includes("info")) {
+                                    eventClass += " meeting";
+                                } else if (
+                                    event.class_name.includes("warning")
+                                ) {
+                                    eventClass += " deadline";
+                                } else if (
+                                    event.class_name.includes("danger")
+                                ) {
+                                    eventClass += " important";
+                                } else {
+                                    eventClass += " other";
+                                }
+
+                                return `
+                                <div class="small-event-item ${eventClass}">
+                                    <div class="small-event-item-title">${event.title} (Ongoing)</div>
+                                    <div class="small-event-item-time">${startTime} - ${endTime}</div>
+                                </div>
+                            `;
+                            })
+                            .join("")}
+                    </div>
+                </div>
+            `;
+        }
+
         if (upcomingEvents.length === 0) {
-            contentElement.innerHTML =
-                '<div class="no-events-small">No upcoming events scheduled.</div>';
+            if (activeEvents.length === 0) {
+                allEventsHTML +=
+                    '<div class="no-events-small">No upcoming events scheduled.</div>';
+            }
         } else {
             // Group events by date
             const eventsByDate = {};
@@ -394,7 +512,6 @@ function showSmallAllEventsFromToday() {
             });
 
             // Generate HTML for all events grouped by date
-            let allEventsHTML = "";
             Object.keys(eventsByDate).forEach((date) => {
                 const events = eventsByDate[date];
                 allEventsHTML += `
@@ -438,9 +555,9 @@ function showSmallAllEventsFromToday() {
                     </div>
                 `;
             });
-
-            contentElement.innerHTML = allEventsHTML;
         }
+
+        contentElement.innerHTML = allEventsHTML;
     }
 }
 
@@ -449,6 +566,22 @@ function getEventsForDate(dateString) {
     return eventData.filter((event) => {
         const eventDate = event.start.split(" ")[0]; // Get date part from datetime
         return eventDate === dateString;
+    });
+}
+
+// Helper function to get active events
+function getActiveEvents() {
+    return activeEventData || [];
+}
+
+// Helper function to get active events for a specific date
+function getActiveEventsForDate(dateString) {
+    return activeEventData.filter((event) => {
+        const eventStartDate = event.start.split(" ")[0]; // Get date part from datetime
+        const eventEndDate = event.end.split(" ")[0]; // Get date part from datetime
+
+        // Check if the selected date falls within the event's date range
+        return dateString >= eventStartDate && dateString <= eventEndDate;
     });
 }
 
@@ -472,13 +605,13 @@ function formatDateForDisplay(dateString) {
         month: "long",
         year: "numeric",
     };
-    return date.toLocaleDateString("en-US", options);
+    return date.toLocaleDateString("en-GB", options);
 }
 
 // Helper function to format time
 function formatTime(timeString) {
     const date = new Date(timeString);
-    return date.toLocaleTimeString("en-US", {
+    return date.toLocaleTimeString("en-GB", {
         hour: "numeric",
         minute: "2-digit",
         hour12: true,
@@ -489,6 +622,7 @@ function formatTime(timeString) {
 function updateEventDisplay(selectedDate) {
     currentSelectedDate = selectedDate;
     const events = getEventsForDate(selectedDate);
+    const activeEvents = getActiveEventsForDate(selectedDate); // Use date-specific active events
     const titleElement = document.querySelector(".big-screen-title");
     const contentElement = document.querySelector(".big-screen-event-content");
 
@@ -499,11 +633,77 @@ function updateEventDisplay(selectedDate) {
 
     // Update the content
     if (contentElement) {
-        if (events.length === 0) {
-            contentElement.innerHTML =
+        let eventsHTML = "";
+
+        // Add active events section if there are any for this date
+        if (activeEvents.length > 0) {
+            eventsHTML += `
+                <div class="active-events-section">
+                    <div class="active-events-header">
+                        <h6>Currently Active Events</h6>
+                    </div>
+                    <div class="active-events-content">
+                        ${activeEvents
+                            .map((event) => {
+                                const startTime = formatTime(event.start);
+                                const endTime = formatTime(event.end);
+
+                                // Map class names to our CSS classes
+                                let eventClass = "active"; // Special class for active events
+                                if (event.class_name.includes("success")) {
+                                    eventClass += " online-offline";
+                                } else if (event.class_name.includes("info")) {
+                                    eventClass += " meeting";
+                                } else if (
+                                    event.class_name.includes("warning")
+                                ) {
+                                    eventClass += " deadline";
+                                } else if (
+                                    event.class_name.includes("danger")
+                                ) {
+                                    eventClass += " important";
+                                } else {
+                                    eventClass += " other";
+                                }
+
+                                return `
+                                <div class="big-screen-event-item ${eventClass}">
+                                    <div class="big-screen-event-item-title">
+                                        <span>${event.title} (Ongoing)</span>
+                                    </div>
+                                    <div class="big-screen-event-item-time">
+                                        <span>${startTime} - ${endTime}</span>
+                                    </div>
+                                </div>
+                            `;
+                            })
+                            .join("")}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Add regular events for the selected date
+        if (events.length === 0 && activeEvents.length === 0) {
+            // Only show "no events" if there are no regular events AND no active events for this date
+            eventsHTML +=
                 '<div class="no-events">No events scheduled for this date.</div>';
         } else {
-            contentElement.innerHTML = events
+            if (activeEvents.length > 0 && events.length > 0) {
+                // Only show this header if there are both active events and regular events
+                eventsHTML += `
+                    <div class="date-events-section">
+                        <div class="date-events-header">
+                            <h6>Events for ${formatDateForDisplay(
+                                selectedDate
+                            )}</h6>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Add regular events
+            eventsHTML += events
                 .map((event) => {
                     const startTime = formatTime(event.start);
                     const endTime = formatTime(event.end);
@@ -533,6 +733,8 @@ function updateEventDisplay(selectedDate) {
                 })
                 .join("");
         }
+
+        contentElement.innerHTML = eventsHTML;
     }
 }
 
@@ -583,6 +785,7 @@ function showAllEventsFromToday() {
     // Sort events by date and time
     upcomingEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
 
+    const activeEvents = getActiveEvents();
     const titleElement = document.querySelector(".big-screen-title");
     const contentElement = document.querySelector(".big-screen-event-content");
 
@@ -593,9 +796,61 @@ function showAllEventsFromToday() {
 
     // Update the content
     if (contentElement) {
+        let allEventsHTML = "";
+
+        // Add active events section if there are any
+        if (activeEvents.length > 0) {
+            allEventsHTML += `
+                <div class="all-events-date-group">
+                    <div class="all-events-date-header">
+                        <h6>Currently Active Events</h6>
+                    </div>
+                    <div class="all-events-date-content">
+                        ${activeEvents
+                            .map((event) => {
+                                const startTime = formatTime(event.start);
+                                const endTime = formatTime(event.end);
+
+                                // Map class names to our CSS classes
+                                let eventClass = "active"; // Special class for active events
+                                if (event.class_name.includes("success")) {
+                                    eventClass += " online-offline";
+                                } else if (event.class_name.includes("info")) {
+                                    eventClass += " meeting";
+                                } else if (
+                                    event.class_name.includes("warning")
+                                ) {
+                                    eventClass += " deadline";
+                                } else if (
+                                    event.class_name.includes("danger")
+                                ) {
+                                    eventClass += " important";
+                                } else {
+                                    eventClass += " other";
+                                }
+
+                                return `
+                                <div class="big-screen-event-item ${eventClass}">
+                                    <div class="big-screen-event-item-title">
+                                        <span>${event.title} (Ongoing)</span>
+                                    </div>
+                                    <div class="big-screen-event-item-time">
+                                        <span>${startTime} - ${endTime}</span>
+                                    </div>
+                                </div>
+                            `;
+                            })
+                            .join("")}
+                    </div>
+                </div>
+            `;
+        }
+
         if (upcomingEvents.length === 0) {
-            contentElement.innerHTML =
-                '<div class="no-events">No upcoming events scheduled.</div>';
+            if (activeEvents.length === 0) {
+                allEventsHTML +=
+                    '<div class="no-events">No upcoming events scheduled.</div>';
+            }
         } else {
             // Group events by date
             const eventsByDate = {};
@@ -608,7 +863,6 @@ function showAllEventsFromToday() {
             });
 
             // Generate HTML for all events grouped by date
-            let allEventsHTML = "";
             Object.keys(eventsByDate).forEach((date) => {
                 const events = eventsByDate[date];
                 allEventsHTML += `
@@ -656,9 +910,9 @@ function showAllEventsFromToday() {
                     </div>
                 `;
             });
-
-            contentElement.innerHTML = allEventsHTML;
         }
+
+        contentElement.innerHTML = allEventsHTML;
     }
 }
 
