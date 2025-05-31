@@ -421,14 +421,14 @@ body {
 }
 
 .infinite-day.infinite-today {
-    background: #b52f31;
+    background: #000000;
     color: white;
     font-weight: 600;
 }
 
 .infinite-day.infinite-selected {
-    background: rgba(181, 47, 49, 0.3);
-    color: #b52f31;
+    background: #feeaeb;
+    color: #f90203;
     font-weight: 600;
 }
 
@@ -560,6 +560,7 @@ body {
 /* Scroll styling for all events view */
 .big-screen-event-content {
     max-height: calc(100vh - 120px);
+    max-height: calc(100dvh - 120px);
     overflow-y: auto;
     padding-right: 10px;
 }
