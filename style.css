@@ -21,7 +21,7 @@ body {
     display: inline-block;
     padding: 4px 12px;
     border-radius: 20px;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -221,7 +221,7 @@ body {
 }
 
 .calendar-year {
-    font-size: 14px;
+    font-size: 16px;
     color: #666;
     font-weight: 400;
 }
@@ -282,7 +282,7 @@ body {
 
 .small-weekday {
     text-align: center;
-    font-size: 14px;
+    font-size: 16px;
     color: #666;
     padding: 8px 0;
     font-weight: 500;
@@ -357,24 +357,29 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
+    min-height: 40px;
 }
 
 .small-events-controls {
-    display: flex !important;
+    display: flex;
     gap: 8px;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .small-events-title {
     font-size: 18px;
     font-weight: 600;
     color: #000;
+    flex: 1;
+    min-width: 0;
 }
 
 .small-all-events-btn {
-    font-size: 14px;
+    font-size: 16px;
     padding: 6px 12px;
     border-radius: 6px;
+    white-space: nowrap;
 }
 
 .small-events-content {
@@ -421,12 +426,12 @@ body {
     font-weight: 600;
     color: #2c3e50;
     margin-bottom: 4px;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .small-event-item-time {
     color: #6c757d;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .no-events-small {
@@ -437,7 +442,7 @@ body {
     background-color: #f8f9fa;
     border-radius: 8px;
     border: 1px dashed #dee2e6;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 /* Small screen all events styling */
@@ -455,7 +460,7 @@ body {
     margin: 0;
     color: #495057;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .small-all-events-date-content {
@@ -521,7 +526,7 @@ body {
 
 .infinite-weekday {
     text-align: center;
-    font-size: 14px;
+    font-size: 16px;
     color: #666;
     padding: 8px 0;
     font-weight: 500;
@@ -589,7 +594,7 @@ body {
     text-align: center;
     padding: 20px;
     color: #666;
-    font-size: 14px;
+    font-size: 16px;
 }
 /* infinite calendar end */
 
@@ -759,7 +764,7 @@ body {
     .event-detail-time,
     .event-detail-date,
     .event-detail-duration {
-        font-size: 14px;
+        font-size: 16px;
     }
 }
 
@@ -817,20 +822,44 @@ body {
 
 /* Filter controls responsive */
 @media (max-width: 480px) {
+    .small-events-header {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .small-events-title {
+        font-size: 16px;
+        width: 100%;
+        margin-bottom: 4px;
+    }
+
+    .small-events-controls {
+        gap: 6px;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .small-events-controls .btn {
+        font-size: 16px;
+        padding: 4px 8px;
+    }
+
+    .small-events-controls .dropdown .btn {
+        font-size: 16px;
+        padding: 4px 8px;
+    }
+}
+
+@media (max-width: 380px) {
     .small-events-controls {
         flex-direction: column;
-        gap: 4px;
         align-items: stretch;
+        gap: 4px;
     }
 
     .small-events-controls .dropdown,
     .small-events-controls .btn {
         width: 100%;
-    }
-
-    .small-events-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+        text-align: center;
     }
 }
