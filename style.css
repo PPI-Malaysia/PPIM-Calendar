@@ -78,6 +78,37 @@ body {
     color: #475569;
 }
 
+/* Add these missing category styles */
+
+/* For filter badges */
+.filter-category-badge.kominfo {
+    background-color: #8b5cf6; /* Purple variant */
+}
+
+.filter-category-badge.penkastrat {
+    background-color: #06b6d4; /* Cyan */
+}
+
+.filter-category-badge.huvoks {
+    background-color: #10b981; /* Emerald */
+}
+
+/* For event detail modal */
+.event-detail-category.kominfo {
+    background-color: #f3e8ff;
+    color: #8b5cf6;
+}
+
+.event-detail-category.penkastrat {
+    background-color: #ecfeff;
+    color: #06b6d4;
+}
+
+.event-detail-category.huvoks {
+    background-color: #d1fae5;
+    color: #10b981;
+}
+
 .event-detail-title {
     font-size: 24px;
     font-weight: 700;
