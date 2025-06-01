@@ -239,7 +239,7 @@ body {
 .calendar-month {
     font-size: 24px;
     font-weight: 600;
-    color: #000;
+    color: #121212;
 }
 
 .small-calendar-controls {
@@ -267,7 +267,7 @@ body {
 }
 
 .today-btn {
-    color: #000;
+    color: #121212;
 }
 
 .nav-btn {
@@ -331,7 +331,7 @@ body {
 }
 
 .small-day.today {
-    background: #000;
+    background: #121212;
     color: white;
     font-weight: 600;
 }
@@ -380,7 +380,7 @@ body {
 .small-events-title {
     font-size: 18px;
     font-weight: 600;
-    color: #000;
+    color: #121212;
     flex: 1;
     min-width: 0;
 }
@@ -523,7 +523,7 @@ body {
 .infinite-month-title {
     font-size: 18px;
     font-weight: 600;
-    color: black;
+    color: #121212;
 }
 
 .infinite-weekdays {
@@ -575,7 +575,7 @@ body {
 }
 
 .infinite-day.infinite-today {
-    background: #000000;
+    background: #121212;
     color: white;
     font-weight: 600;
 }
@@ -628,7 +628,7 @@ body {
 .big-screen-title {
     font-size: 18px;
     font-weight: 600;
-    color: black;
+    color: #121212;
 }
 
 /* No events message */
