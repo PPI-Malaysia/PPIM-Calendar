@@ -19,7 +19,7 @@
             rel="stylesheet"
         />
 
-        <link href="style.css?ver=3.1" rel="stylesheet" />
+        <link href="style.css?ver=3.2" rel="stylesheet" />
         <link rel="icon" type="image/x-icon" href="media/favicon.ico" />
     </head>
     <body>
@@ -40,18 +40,13 @@
             aria-hidden="true"
         >
             <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="eventDetailModalLabel">
-                            Event Details
-                        </h5>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
-                    </div>
+                <div class="modal-content modal-content-event">
+                    <button
+                        type="button"
+                        class="btn-close btn-close-modal"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
                     <div class="modal-body">
                         <div class="event-detail-container">
                             <div
@@ -76,15 +71,6 @@
                                 <!-- Event duration will be inserted here -->
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                        >
-                            Close
-                        </button>
                     </div>
                 </div>
             </div>

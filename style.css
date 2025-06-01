@@ -16,6 +16,16 @@ body {
 .event-detail-container {
     padding: 20px 0;
 }
+.modal-content-event {
+    position: relative;
+}
+.btn-close-modal {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 20px;
+    z-index: 99999;
+}
 
 .event-detail-category {
     display: inline-block;
