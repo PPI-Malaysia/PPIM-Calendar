@@ -118,7 +118,7 @@ class InfiniteCalendar {
         let daysHTML = "";
 
         // Previous month's trailing days
-        const prevMonth = new Date(year, month - 1, 0);
+        const prevMonth = new Date(year, month, 0);
         for (let i = startDay - 1; i >= 0; i--) {
             const day = prevMonth.getDate() - i;
             const prevYear = month === 0 ? year - 1 : year;

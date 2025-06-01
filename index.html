@@ -19,7 +19,7 @@
             rel="stylesheet"
         />
 
-        <link href="style.css?ver=2" rel="stylesheet" />
+        <link href="style.css?ver=3" rel="stylesheet" />
         <link rel="icon" type="image/x-icon" href="media/favicon.ico" />
     </head>
     <body>
@@ -29,6 +29,65 @@
             <div class="loading-ring"></div>
             <!-- Logo in the center -->
             <img class="logo-circle" src="media/logo.png" />
+        </div>
+
+        <!-- Event Detail Modal -->
+        <div
+            class="modal fade"
+            id="eventDetailModal"
+            tabindex="-1"
+            aria-labelledby="eventDetailModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="eventDetailModalLabel">
+                            Event Details
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="event-detail-container">
+                            <div
+                                class="event-detail-category"
+                                id="modalEventCategory"
+                            >
+                                <!-- Event category will be inserted here -->
+                            </div>
+                            <h4 class="event-detail-title" id="modalEventTitle">
+                                <!-- Event title will be inserted here -->
+                            </h4>
+                            <div class="event-detail-time" id="modalEventTime">
+                                <!-- Event time will be inserted here -->
+                            </div>
+                            <div class="event-detail-date" id="modalEventDate">
+                                <!-- Event date will be inserted here -->
+                            </div>
+                            <div
+                                class="event-detail-duration"
+                                id="modalEventDuration"
+                            >
+                                <!-- Event duration will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- loading overlay end -->
@@ -92,15 +151,38 @@
                                 <span
                                     class="small-events-title"
                                     id="smallEventsTitle"
-                                    >1 June 2025</span
+                                    >X XXXX XXXX</span
                                 >
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-dark small-all-events-btn"
-                                    id="smallAllEventsBtn"
-                                >
-                                    All Events
-                                </button>
+                                <div class="small-events-controls">
+                                    <div
+                                        class="dropdown"
+                                        id="smallFilterDropdown"
+                                        style="display: none"
+                                    >
+                                        <button
+                                            class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                                            type="button"
+                                            id="smallFilterDropdownBtn"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                        >
+                                            All
+                                        </button>
+                                        <ul
+                                            class="dropdown-menu"
+                                            id="smallFilterDropdownMenu"
+                                        >
+                                            <!-- Filter options will be populated by JavaScript -->
+                                        </ul>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-dark small-all-events-btn"
+                                        id="smallAllEventsBtn"
+                                    >
+                                        All Events
+                                    </button>
+                                </div>
                             </div>
                             <hr />
                             <div
@@ -137,13 +219,36 @@
                                 <span class="big-screen-title"
                                     >1 June 2025</span
                                 >
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-dark"
-                                    id="bigAllEventsBtn"
-                                >
-                                    All Events
-                                </button>
+                                <div class="big-screen-event-controls">
+                                    <div
+                                        class="dropdown"
+                                        id="bigFilterDropdown"
+                                        style="display: none"
+                                    >
+                                        <button
+                                            class="btn btn-outline-secondary dropdown-toggle"
+                                            type="button"
+                                            id="bigFilterDropdownBtn"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                        >
+                                            All
+                                        </button>
+                                        <ul
+                                            class="dropdown-menu"
+                                            id="bigFilterDropdownMenu"
+                                        >
+                                            <!-- Filter options will be populated by JavaScript -->
+                                        </ul>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-dark"
+                                        id="bigAllEventsBtn"
+                                    >
+                                        All Events
+                                    </button>
+                                </div>
                             </div>
                             <hr />
                             <div class="big-screen-event-content"></div>
@@ -158,7 +263,7 @@
             integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
             crossorigin="anonymous"
         ></script>
-        <script src="infinite-calendar.js?ver=2"></script>
-        <script src="script.js"></script>
+        <script src="infinite-calendar.js?ver=3"></script>
+        <script src="script.js?ver=3"></script>
     </body>
 </html>

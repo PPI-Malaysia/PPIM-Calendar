@@ -13,6 +13,10 @@ let smallSelectedDate = null;
 let isShowingAllEventsSmall = false;
 let smallCalendarInitialized = false;
 
+// Filter variables
+let currentSmallFilter = null; // null means show all
+let currentBigFilter = null; // null means show all
+
 const monthNames = [
     "January",
     "February",
@@ -173,7 +177,7 @@ function generateSmallCalendarDays(year, month) {
     let daysHTML = "";
 
     // Previous month's trailing days
-    const prevMonth = new Date(year, month - 1, 0);
+    const prevMonth = new Date(year, month, 0);
     for (let i = startDay - 1; i >= 0; i--) {
         const day = prevMonth.getDate() - i;
         const prevYear = month === 0 ? year - 1 : year;
@@ -325,7 +329,13 @@ function updateSmallEventDisplay(selectedDate) {
                                 }
 
                                 return `
-                                <div class="small-event-item ${eventClass}">
+                                <div class="small-event-item ${eventClass}" 
+                                     data-event-id="${event.id}"
+                                     data-event-name="${event.name}"
+                                     data-event-title="${event.title}"
+                                     data-event-start="${event.start}"
+                                     data-event-end="${event.end}"
+                                     onclick="showEventDetail(this)">
                                     <div class="small-event-item-title">${event.title} (Ongoing)</div>
                                     <div class="small-event-item-time">${startTime} - ${endTime}</div>
                                 </div>
@@ -375,7 +385,13 @@ function updateSmallEventDisplay(selectedDate) {
                     }
 
                     return `
-                    <div class="small-event-item ${eventClass}">
+                    <div class="small-event-item ${eventClass}"
+                         data-event-id="${event.id}"
+                         data-event-name="${event.name}"
+                         data-event-title="${event.title}"
+                         data-event-start="${event.start}"
+                         data-event-end="${event.end}"
+                         onclick="showEventDetail(this)">
                         <div class="small-event-item-title">${event.title}</div>
                         <div class="small-event-item-time">${startTime} - ${endTime}</div>
                     </div>
@@ -402,11 +418,20 @@ function setupSmallAllEventsButton() {
 // Function to toggle between all events and single day view for small screen
 function toggleSmallAllEventsView() {
     const button = document.getElementById("smallAllEventsBtn");
+    const filterDropdown = document.getElementById("smallFilterDropdown");
 
     if (isShowingAllEventsSmall) {
         // Switch back to single day view
         isShowingAllEventsSmall = false;
         button.textContent = "All Events";
+
+        // Hide filter dropdown
+        if (filterDropdown) {
+            filterDropdown.style.display = "none";
+        }
+
+        // Reset filter
+        currentSmallFilter = null;
 
         // Show events for the currently selected date
         if (smallSelectedDate) {
@@ -415,7 +440,14 @@ function toggleSmallAllEventsView() {
     } else {
         // Switch to all events view
         isShowingAllEventsSmall = true;
-        button.textContent = "Back to Day View";
+        button.textContent = "Day";
+
+        // Show and populate filter dropdown
+        if (filterDropdown) {
+            filterDropdown.style.display = "block";
+            populateFilterDropdown("smallFilterDropdownMenu", true);
+        }
+
         showSmallAllEventsFromToday();
     }
 }
@@ -430,21 +462,40 @@ function showSmallAllEventsFromToday() {
     );
 
     // Filter events from today onwards
-    const upcomingEvents = eventData.filter((event) => {
+    let upcomingEvents = eventData.filter((event) => {
         const eventDate = event.start.split(" ")[0];
         return eventDate >= todayString;
     });
 
+    // Apply category filter if selected
+    if (currentSmallFilter) {
+        upcomingEvents = upcomingEvents.filter(
+            (event) => event.name === currentSmallFilter
+        );
+    }
+
     // Sort events by date and time
     upcomingEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
 
-    const activeEvents = getActiveEvents();
+    let activeEvents = getActiveEvents();
+
+    // Apply category filter to active events if selected
+    if (currentSmallFilter) {
+        activeEvents = activeEvents.filter(
+            (event) => event.name === currentSmallFilter
+        );
+    }
+
     const titleElement = document.getElementById("smallEventsTitle");
     const contentElement = document.getElementById("smallEventsContent");
 
     // Update the title
     if (titleElement) {
-        titleElement.textContent = "All Upcoming Events";
+        let titleText = "All Upcoming Events";
+        if (currentSmallFilter) {
+            titleText = `${getCategoryDisplayName(currentSmallFilter)} Events`;
+        }
+        titleElement.textContent = titleText;
     }
 
     // Update the content
@@ -483,7 +534,13 @@ function showSmallAllEventsFromToday() {
                                 }
 
                                 return `
-                                <div class="small-event-item ${eventClass}">
+                                <div class="small-event-item ${eventClass}"
+                                     data-event-id="${event.id}"
+                                     data-event-name="${event.name}"
+                                     data-event-title="${event.title}"
+                                     data-event-start="${event.start}"
+                                     data-event-end="${event.end}"
+                                     onclick="showEventDetail(this)">
                                     <div class="small-event-item-title">${event.title} (Ongoing)</div>
                                     <div class="small-event-item-time">${startTime} - ${endTime}</div>
                                 </div>
@@ -497,8 +554,13 @@ function showSmallAllEventsFromToday() {
 
         if (upcomingEvents.length === 0) {
             if (activeEvents.length === 0) {
-                allEventsHTML +=
-                    '<div class="no-events-small">No upcoming events scheduled.</div>';
+                let noEventsText = "No upcoming events scheduled.";
+                if (currentSmallFilter) {
+                    noEventsText = `No upcoming ${getCategoryDisplayName(
+                        currentSmallFilter
+                    ).toLowerCase()} events scheduled.`;
+                }
+                allEventsHTML += `<div class="no-events-small">${noEventsText}</div>`;
             }
         } else {
             // Group events by date
@@ -544,7 +606,13 @@ function showSmallAllEventsFromToday() {
                                     }
 
                                     return `
-                                    <div class="small-event-item ${eventClass}">
+                                    <div class="small-event-item ${eventClass}"
+                                         data-event-id="${event.id}"
+                                         data-event-name="${event.name}"
+                                         data-event-title="${event.title}"
+                                         data-event-start="${event.start}"
+                                         data-event-end="${event.end}"
+                                         onclick="showEventDetail(this)">
                                         <div class="small-event-item-title">${event.title}</div>
                                         <div class="small-event-item-time">${startTime} - ${endTime}</div>
                                     </div>
@@ -618,6 +686,130 @@ function formatTime(timeString) {
     });
 }
 
+// Helper function to get unique event categories
+function getUniqueEventCategories() {
+    const categories = new Set();
+    eventData.forEach((event) => {
+        if (event.name) {
+            categories.add(event.name);
+        }
+    });
+    activeEventData.forEach((event) => {
+        if (event.name) {
+            categories.add(event.name);
+        }
+    });
+    return Array.from(categories).sort();
+}
+
+// Helper function to get category display name
+function getCategoryDisplayName(categoryName) {
+    const displayNames = {
+        sosmas: "Sosmas",
+        kelembagaan: "Kelembagaan",
+        pendidikan: "Pendidikan",
+        danus: "Danus",
+        segaya: "Segaya",
+        ksa: "KSA",
+        keagamaan: "Keagamaan",
+        pusdatin: "Pusdatin",
+        kominfo: "Kominfo",
+        penkastrat: "Penkastrat",
+        huvoks: "Huvoks",
+    };
+    return (
+        displayNames[categoryName] ||
+        categoryName.charAt(0).toUpperCase() + categoryName.slice(1)
+    );
+}
+
+// Function to populate filter dropdown
+function populateFilterDropdown(dropdownMenuId, isSmall = false) {
+    const dropdownMenu = document.getElementById(dropdownMenuId);
+    if (!dropdownMenu) return;
+
+    const categories = getUniqueEventCategories();
+    let menuHTML = "";
+
+    // Add "All Categories" option
+    menuHTML += `
+        <li><a class="dropdown-item filter-item" href="#" data-filter="" data-is-small="${isSmall}">
+            <div class="filter-category-item">
+                <span>All Categories</span>
+            </div>
+        </a></li>
+    `;
+
+    if (categories.length > 0) {
+        menuHTML += '<li><hr class="dropdown-divider"></li>';
+
+        // Add category options
+        categories.forEach((category) => {
+            menuHTML += `
+                <li><a class="dropdown-item filter-item" href="#" data-filter="${category}" data-is-small="${isSmall}">
+                    <div class="filter-category-item">
+                        <span class="filter-category-badge ${category}"></span>
+                        <span>${getCategoryDisplayName(category)}</span>
+                    </div>
+                </a></li>
+            `;
+        });
+    }
+
+    dropdownMenu.innerHTML = menuHTML;
+
+    // Add event listeners to filter items
+    dropdownMenu.querySelectorAll(".filter-item").forEach((item) => {
+        item.addEventListener("click", (e) => {
+            e.preventDefault();
+            const filter = e.currentTarget.dataset.filter || null;
+            const isSmallScreen = e.currentTarget.dataset.isSmall === "true";
+
+            if (isSmallScreen) {
+                applySmallFilter(filter);
+            } else {
+                applyBigFilter(filter);
+            }
+        });
+    });
+}
+
+// Function to apply filter for small screen
+function applySmallFilter(filter) {
+    currentSmallFilter = filter;
+
+    // Update dropdown button text
+    const dropdownBtn = document.getElementById("smallFilterDropdownBtn");
+    if (dropdownBtn) {
+        if (filter) {
+            dropdownBtn.textContent = getCategoryDisplayName(filter);
+        } else {
+            dropdownBtn.textContent = "All";
+        }
+    }
+
+    // Re-render the events with filter applied
+    showSmallAllEventsFromToday();
+}
+
+// Function to apply filter for big screen
+function applyBigFilter(filter) {
+    currentBigFilter = filter;
+
+    // Update dropdown button text
+    const dropdownBtn = document.getElementById("bigFilterDropdownBtn");
+    if (dropdownBtn) {
+        if (filter) {
+            dropdownBtn.textContent = getCategoryDisplayName(filter);
+        } else {
+            dropdownBtn.textContent = "All";
+        }
+    }
+
+    // Re-render the events with filter applied
+    showAllEventsFromToday();
+}
+
 // Function to update the event display (for big screen)
 function updateEventDisplay(selectedDate) {
     currentSelectedDate = selectedDate;
@@ -667,7 +859,13 @@ function updateEventDisplay(selectedDate) {
                                 }
 
                                 return `
-                                <div class="big-screen-event-item ${eventClass}">
+                                <div class="big-screen-event-item ${eventClass}"
+                                     data-event-id="${event.id}"
+                                     data-event-name="${event.name}"
+                                     data-event-title="${event.title}"
+                                     data-event-start="${event.start}"
+                                     data-event-end="${event.end}"
+                                     onclick="showEventDetail(this)">
                                     <div class="big-screen-event-item-title">
                                         <span>${event.title} (Ongoing)</span>
                                     </div>
@@ -721,7 +919,13 @@ function updateEventDisplay(selectedDate) {
                     }
 
                     return `
-                    <div class="big-screen-event-item ${eventClass}">
+                    <div class="big-screen-event-item ${eventClass}"
+                         data-event-id="${event.id}"
+                         data-event-name="${event.name}"
+                         data-event-title="${event.title}"
+                         data-event-start="${event.start}"
+                         data-event-end="${event.end}"
+                         onclick="showEventDetail(this)">
                         <div class="big-screen-event-item-title">
                             <span>${event.title}</span>
                         </div>
@@ -749,11 +953,20 @@ function setupAllEventsButton() {
 // Function to toggle between all events and single day view
 function toggleAllEventsView() {
     const button = document.getElementById("bigAllEventsBtn");
+    const filterDropdown = document.getElementById("bigFilterDropdown");
 
     if (isShowingAllEvents) {
         // Switch back to single day view
         isShowingAllEvents = false;
         button.textContent = "All Events";
+
+        // Hide filter dropdown
+        if (filterDropdown) {
+            filterDropdown.style.display = "none";
+        }
+
+        // Reset filter
+        currentBigFilter = null;
 
         // Show events for the currently selected date
         if (currentSelectedDate) {
@@ -762,7 +975,14 @@ function toggleAllEventsView() {
     } else {
         // Switch to all events view
         isShowingAllEvents = true;
-        button.textContent = "Back to Day View";
+        button.textContent = "Day";
+
+        // Show and populate filter dropdown
+        if (filterDropdown) {
+            filterDropdown.style.display = "block";
+            populateFilterDropdown("bigFilterDropdownMenu", false);
+        }
+
         showAllEventsFromToday();
     }
 }
@@ -777,21 +997,40 @@ function showAllEventsFromToday() {
     );
 
     // Filter events from today onwards
-    const upcomingEvents = eventData.filter((event) => {
+    let upcomingEvents = eventData.filter((event) => {
         const eventDate = event.start.split(" ")[0];
         return eventDate >= todayString;
     });
 
+    // Apply category filter if selected
+    if (currentBigFilter) {
+        upcomingEvents = upcomingEvents.filter(
+            (event) => event.name === currentBigFilter
+        );
+    }
+
     // Sort events by date and time
     upcomingEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
 
-    const activeEvents = getActiveEvents();
+    let activeEvents = getActiveEvents();
+
+    // Apply category filter to active events if selected
+    if (currentBigFilter) {
+        activeEvents = activeEvents.filter(
+            (event) => event.name === currentBigFilter
+        );
+    }
+
     const titleElement = document.querySelector(".big-screen-title");
     const contentElement = document.querySelector(".big-screen-event-content");
 
     // Update the title
     if (titleElement) {
-        titleElement.textContent = "All Upcoming Events";
+        let titleText = "All Upcoming Events";
+        if (currentBigFilter) {
+            titleText = `${getCategoryDisplayName(currentBigFilter)} Events`;
+        }
+        titleElement.textContent = titleText;
     }
 
     // Update the content
@@ -830,7 +1069,13 @@ function showAllEventsFromToday() {
                                 }
 
                                 return `
-                                <div class="big-screen-event-item ${eventClass}">
+                                <div class="big-screen-event-item ${eventClass}"
+                                     data-event-id="${event.id}"
+                                     data-event-name="${event.name}"
+                                     data-event-title="${event.title}"
+                                     data-event-start="${event.start}"
+                                     data-event-end="${event.end}"
+                                     onclick="showEventDetail(this)">
                                     <div class="big-screen-event-item-title">
                                         <span>${event.title} (Ongoing)</span>
                                     </div>
@@ -848,8 +1093,13 @@ function showAllEventsFromToday() {
 
         if (upcomingEvents.length === 0) {
             if (activeEvents.length === 0) {
-                allEventsHTML +=
-                    '<div class="no-events">No upcoming events scheduled.</div>';
+                let noEventsText = "No upcoming events scheduled.";
+                if (currentBigFilter) {
+                    noEventsText = `No upcoming ${getCategoryDisplayName(
+                        currentBigFilter
+                    ).toLowerCase()} events scheduled.`;
+                }
+                allEventsHTML += `<div class="no-events">${noEventsText}</div>`;
             }
         } else {
             // Group events by date
@@ -895,7 +1145,13 @@ function showAllEventsFromToday() {
                                     }
 
                                     return `
-                                    <div class="big-screen-event-item ${eventClass}">
+                                    <div class="big-screen-event-item ${eventClass}"
+                                         data-event-id="${event.id}"
+                                         data-event-name="${event.name}"
+                                         data-event-title="${event.title}"
+                                         data-event-start="${event.start}"
+                                         data-event-end="${event.end}"
+                                         onclick="showEventDetail(this)">
                                         <div class="big-screen-event-item-title">
                                             <span>${event.title}</span>
                                         </div>
@@ -914,6 +1170,84 @@ function showAllEventsFromToday() {
 
         contentElement.innerHTML = allEventsHTML;
     }
+}
+
+// New function to show event detail modal
+function showEventDetail(eventElement) {
+    const eventId = eventElement.dataset.eventId;
+    const eventName = eventElement.dataset.eventName;
+    const eventTitle = eventElement.dataset.eventTitle;
+    const eventStart = eventElement.dataset.eventStart;
+    const eventEnd = eventElement.dataset.eventEnd;
+
+    // Calculate duration
+    const startDate = new Date(eventStart);
+    const endDate = new Date(eventEnd);
+    const durationMs = endDate - startDate;
+    const durationHours = Math.floor(durationMs / (1000 * 60 * 60));
+    const durationMinutes = Math.floor(
+        (durationMs % (1000 * 60 * 60)) / (1000 * 60)
+    );
+
+    let durationText = "";
+    if (durationHours > 0) {
+        durationText = `${durationHours}h ${durationMinutes}m`;
+    } else {
+        durationText = `${durationMinutes}m`;
+    }
+
+    // Check if it's a multi-day event
+    const startDateStr = eventStart.split(" ")[0];
+    const endDateStr = eventEnd.split(" ")[0];
+    const isMultiDay = startDateStr !== endDateStr;
+
+    // Update modal content
+    const modalCategory = document.getElementById("modalEventCategory");
+    const modalTitle = document.getElementById("modalEventTitle");
+    const modalTime = document.getElementById("modalEventTime");
+    const modalDate = document.getElementById("modalEventDate");
+    const modalDuration = document.getElementById("modalEventDuration");
+
+    // Set category with appropriate styling
+    modalCategory.textContent = eventName.toUpperCase();
+    modalCategory.className = `event-detail-category ${eventName}`;
+
+    // Set title
+    modalTitle.textContent = eventTitle;
+
+    // Set time
+    if (isMultiDay) {
+        modalTime.textContent = `${formatTime(eventStart)} - ${formatTime(
+            eventEnd
+        )}`;
+    } else {
+        modalTime.textContent = `${formatTime(eventStart)} - ${formatTime(
+            eventEnd
+        )}`;
+    }
+
+    // Set date
+    if (isMultiDay) {
+        modalDate.textContent = `${formatDateForDisplay(
+            startDateStr
+        )} - ${formatDateForDisplay(endDateStr)}`;
+    } else {
+        modalDate.textContent = formatDateForDisplay(startDateStr);
+    }
+
+    // Set duration
+    if (isMultiDay) {
+        const days = Math.ceil(durationMs / (1000 * 60 * 60 * 24));
+        modalDuration.textContent = `${days} day${days > 1 ? "s" : ""}`;
+    } else {
+        modalDuration.textContent = durationText;
+    }
+
+    // Show the modal
+    const modal = new bootstrap.Modal(
+        document.getElementById("eventDetailModal")
+    );
+    modal.show();
 }
 
 // Hide loading when page loads
