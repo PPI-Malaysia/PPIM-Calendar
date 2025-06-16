@@ -173,11 +173,15 @@ class InfiniteCalendar {
     }
 
     selectDate(dateString) {
+        console.log("Selecting date:", dateString); // Debug log
+
         // If we're showing all events, switch back to single day view
-        if (isShowingAllEvents) {
+        if (typeof isShowingAllEvents !== "undefined" && isShowingAllEvents) {
             const button = document.getElementById("bigAllEventsBtn");
-            isShowingAllEvents = false;
-            button.textContent = "All Events";
+            if (button) {
+                isShowingAllEvents = false;
+                button.textContent = "All Events";
+            }
         }
 
         // Remove previous selection
@@ -186,23 +190,44 @@ class InfiniteCalendar {
         );
         if (prevSelected) {
             prevSelected.classList.remove("infinite-selected");
+            console.log("Removed previous selection"); // Debug log
         }
 
-        // Add selection to new date
-        const newSelected = this.content.querySelector(
+        // Add selection to new date - find the date element
+        const dateElements = this.content.querySelectorAll(
             `[data-date="${dateString}"]`
         );
-        if (
-            newSelected &&
-            !newSelected.classList.contains("infinite-other-month")
-        ) {
-            newSelected.classList.add("infinite-selected");
+        console.log(
+            `Found ${dateElements.length} elements with date ${dateString}`
+        ); // Debug log
+
+        let newSelected = null;
+
+        // Look for the element that's NOT from other month
+        for (let element of dateElements) {
+            if (!element.classList.contains("infinite-other-month")) {
+                newSelected = element;
+                break;
+            }
         }
 
-        this.selectedDate = dateString;
+        // If no current month element found, use the first one
+        if (!newSelected && dateElements.length > 0) {
+            newSelected = dateElements[0];
+        }
 
-        // Update the event display
-        updateEventDisplay(dateString);
+        if (newSelected) {
+            newSelected.classList.add("infinite-selected");
+            console.log("Added selection to:", newSelected); // Debug log
+            this.selectedDate = dateString;
+
+            // Update the event display
+            if (typeof updateEventDisplay === "function") {
+                updateEventDisplay(dateString);
+            }
+        } else {
+            console.log("No element found for date:", dateString); // Debug log
+        }
     }
 
     setupScrollListener() {
@@ -217,9 +242,14 @@ class InfiniteCalendar {
 
         // Handle day clicks
         this.content.addEventListener("click", (e) => {
+            console.log("Clicked element:", e.target); // Debug log
+            console.log("Element classes:", e.target.classList); // Debug log
+            console.log("Data date:", e.target.dataset.date); // Debug log
+
             if (e.target.classList.contains("infinite-day")) {
                 const clickedDate = e.target.dataset.date;
                 if (clickedDate) {
+                    console.log("Calling selectDate with:", clickedDate); // Debug log
                     this.selectDate(clickedDate);
                 }
             }
