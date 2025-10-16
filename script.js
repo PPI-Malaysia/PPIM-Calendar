@@ -62,9 +62,11 @@ async function fetchCalendarData() {
 
 function hideLoading() {
     const loadingOverlay = document.getElementById("loadingOverlay");
+    const loadingOverlay2 = document.getElementById("loadingOverlay2");
     const mainContent = document.getElementById("mainContent");
 
     loadingOverlay.classList.add("hidden");
+    loadingOverlay2.classList.add("hidden");
 
     setTimeout(() => {
         if (mainContent) {
@@ -1252,9 +1254,11 @@ function showEventDetail(eventElement) {
 
 // Hide loading when page loads
 window.addEventListener("load", function () {
-    setTimeout(hideLoading, 500);
+    setTimeout(hideLoading, 1000);
+    //time: 500
 });
 setTimeout(hideLoading, 5000);
+//time:
 
 // When DOM loaded
 document.addEventListener("DOMContentLoaded", () => {
