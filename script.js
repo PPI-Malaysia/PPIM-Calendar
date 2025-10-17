@@ -35,8 +35,8 @@ const monthNames = [
 async function fetchCalendarData() {
     try {
         const response = await fetch(
-            "https://portal.ppimalaysia.id/assets/php/API/frontend-calendar.php"
-            //"test.json"
+            //"https://portal.ppimalaysia.id/assets/php/API/frontend-calendar.php"
+            "test.json"
         );
         const data = await response.json();
 
@@ -300,13 +300,23 @@ function updateSmallEventDisplay(selectedDate) {
     if (contentElement) {
         let eventsHTML = "";
 
-        // Add active events section if there are any for this date
-        if (activeEvents.length > 0) {
+        // Add regular events for the selected date
+        if (events.length === 0 && activeEvents.length === 0) {
+            // Only show "no events" if there are no regular events AND no active events for this date
+            eventsHTML +=
+                '<div class="no-events-small">No events scheduled for this date.</div>';
+        } else {
+            // Only show this header if there are both active events and regular events
             eventsHTML += `
-                <div class="small-active-events-section">
-                    <div class="small-active-events-header">
-                        <h6>Currently Active Events</h6>
+                <div class="small-date-events-section">
+                    <div class="small-date-events-header">
+                        <h6>Events List</h6>
                     </div>
+                </div>
+            `;
+            // Add active events section if there are any for this date
+            if (activeEvents.length > 0) {
+                eventsHTML += `
                     <div class="small-active-events-content">
                         ${activeEvents
                             .map((event) => {
@@ -346,27 +356,7 @@ function updateSmallEventDisplay(selectedDate) {
                             })
                             .join("")}
                     </div>
-                </div>
             `;
-        }
-
-        // Add regular events for the selected date
-        if (events.length === 0 && activeEvents.length === 0) {
-            // Only show "no events" if there are no regular events AND no active events for this date
-            eventsHTML +=
-                '<div class="no-events-small">No events scheduled for this date.</div>';
-        } else {
-            if (activeEvents.length > 0 && events.length > 0) {
-                // Only show this header if there are both active events and regular events
-                eventsHTML += `
-                    <div class="small-date-events-section">
-                        <div class="small-date-events-header">
-                            <h6>Events for ${formatDateForDisplay(
-                                selectedDate
-                            )}</h6>
-                        </div>
-                    </div>
-                `;
             }
 
             // Add regular events
@@ -464,6 +454,9 @@ function showSmallAllEventsFromToday() {
         today.getDate()
     );
 
+    //check if there is any event today
+    const todayEvents = getEventsForDate(todayString);
+
     // Filter events from today onwards
     let upcomingEvents = eventData.filter((event) => {
         const eventDate = event.start.split(" ")[0];
@@ -506,13 +499,15 @@ function showSmallAllEventsFromToday() {
         let allEventsHTML = "";
 
         // Add active events section if there are any
-        if (activeEvents.length > 0) {
-            allEventsHTML += `
-                <div class="small-all-events-date-group">
+        if (activeEvents.length > 0 || todayEvents.length > 0) {
+            const todayDate = formatDateForDisplay(todayString);
+            allEventsHTML += ` <div class="small-all-events-date-group">
                     <div class="small-all-events-date-header">
-                        <h6>Currently Active Events</h6>
+                        <h6>${todayDate}</h6>
                     </div>
-                    <div class="small-all-events-date-content">
+                    <div class="small-all-events-date-content">`;
+            if (activeEvents.length > 0) {
+                allEventsHTML += `
                         ${activeEvents
                             .map((event) => {
                                 const startTime = formatTime(event.start);
@@ -550,9 +545,46 @@ function showSmallAllEventsFromToday() {
                             `;
                             })
                             .join("")}
-                    </div>
-                </div>
             `;
+            }
+
+            if (todayEvents.length > 0) {
+                allEventsHTML += `
+                    ${todayEvents
+                        .map((event) => {
+                            const startTime = formatTime(event.start);
+                            const endTime = formatTime(event.end);
+
+                            // Map class names to our CSS classes
+                            let eventClass = "other"; // default
+                            if (event.class_name.includes("success")) {
+                                eventClass = "online-offline";
+                            } else if (event.class_name.includes("info")) {
+                                eventClass = "meeting";
+                            } else if (event.class_name.includes("warning")) {
+                                eventClass = "deadline";
+                            } else if (event.class_name.includes("danger")) {
+                                eventClass = "important";
+                            }
+
+                            return `
+                                                        <div class="small-event-item ${eventClass}"
+                                                            data-event-id="${event.id}"
+                                                            data-event-name="${event.name}"
+                                                            data-event-title="${event.title}"
+                                                            data-event-start="${event.start}"
+                                                            data-event-end="${event.end}"
+                                                            onclick="showEventDetail(this)">
+                                                            <div class="small-event-item-title">${event.title}</div>
+                                                            <div class="small-event-item-time">${startTime} - ${endTime}</div>
+                                                        </div>
+                                                    `;
+                        })
+                        .join("")}
+                `;
+            }
+
+            allEventsHTML += `</div></div>`;
         }
 
         if (upcomingEvents.length === 0) {
@@ -579,6 +611,8 @@ function showSmallAllEventsFromToday() {
             // Generate HTML for all events grouped by date
             Object.keys(eventsByDate).forEach((date) => {
                 const events = eventsByDate[date];
+                //if there is an event today, skip it
+                if (date === todayString) return;
                 allEventsHTML += `
                     <div class="small-all-events-date-group">
                         <div class="small-all-events-date-header">
@@ -830,13 +864,24 @@ function updateEventDisplay(selectedDate) {
     if (contentElement) {
         let eventsHTML = "";
 
-        // Add active events section if there are any for this date
-        if (activeEvents.length > 0) {
+        // Add regular events for the selected date
+        if (events.length === 0 && activeEvents.length === 0) {
+            // Only show "no events" if there are no regular events AND no active events for this date
+            eventsHTML +=
+                '<div class="no-events">No events scheduled for this date.</div>';
+        } else {
+            // Only show this header if there are both active events and regular events
             eventsHTML += `
-                <div class="active-events-section">
-                    <div class="active-events-header">
-                        <h6>Currently Active Events</h6>
+                    <div class="date-events-section">
+                        <div class="date-events-header">
+                            <h6>Events List</h6>
+                        </div>
                     </div>
+                `;
+
+            // Add active events section if there are any for this date
+            if (activeEvents.length > 0) {
+                eventsHTML += `
                     <div class="active-events-content">
                         ${activeEvents
                             .map((event) => {
@@ -880,27 +925,7 @@ function updateEventDisplay(selectedDate) {
                             })
                             .join("")}
                     </div>
-                </div>
             `;
-        }
-
-        // Add regular events for the selected date
-        if (events.length === 0 && activeEvents.length === 0) {
-            // Only show "no events" if there are no regular events AND no active events for this date
-            eventsHTML +=
-                '<div class="no-events">No events scheduled for this date.</div>';
-        } else {
-            if (activeEvents.length > 0 && events.length > 0) {
-                // Only show this header if there are both active events and regular events
-                eventsHTML += `
-                    <div class="date-events-section">
-                        <div class="date-events-header">
-                            <h6>Events for ${formatDateForDisplay(
-                                selectedDate
-                            )}</h6>
-                        </div>
-                    </div>
-                `;
             }
 
             // Add regular events
@@ -993,11 +1018,14 @@ function toggleAllEventsView() {
 // Function to show all events from current date onwards
 function showAllEventsFromToday() {
     const today = new Date();
+
     const todayString = formatDateToString(
         today.getFullYear(),
         today.getMonth(),
         today.getDate()
     );
+    //check if there is any event today
+    const todayEvents = getEventsForDate(todayString);
 
     // Filter events from today onwards
     let upcomingEvents = eventData.filter((event) => {
@@ -1041,13 +1069,18 @@ function showAllEventsFromToday() {
         let allEventsHTML = "";
 
         // Add active events section if there are any
-        if (activeEvents.length > 0) {
+        if (activeEvents.length > 0 || todayEvents.length > 0) {
+            //get date today and then put it on formatDateForDisplay
+            const todayDate = formatDateForDisplay(todayString);
             allEventsHTML += `
-                <div class="all-events-date-group">
+             <div class="all-events-date-group">
                     <div class="all-events-date-header">
-                        <h6>Currently Active Events</h6>
+                        <h6>${todayDate}</h6>
                     </div>
                     <div class="all-events-date-content">
+                    `;
+            if (activeEvents.length > 0) {
+                allEventsHTML += `
                         ${activeEvents
                             .map((event) => {
                                 const startTime = formatTime(event.start);
@@ -1089,9 +1122,56 @@ function showAllEventsFromToday() {
                             `;
                             })
                             .join("")}
-                    </div>
-                </div>
             `;
+            }
+            //if there is an event today, show here
+            if (todayEvents.length > 0) {
+                allEventsHTML += `
+                            ${todayEvents
+                                .map((event) => {
+                                    const startTime = formatTime(event.start);
+                                    const endTime = formatTime(event.end);
+
+                                    // Map class names to our CSS classes
+                                    let eventClass = "other"; // default
+                                    if (event.class_name.includes("success")) {
+                                        eventClass = "online-offline";
+                                    } else if (
+                                        event.class_name.includes("info")
+                                    ) {
+                                        eventClass = "meeting";
+                                    } else if (
+                                        event.class_name.includes("warning")
+                                    ) {
+                                        eventClass = "deadline";
+                                    } else if (
+                                        event.class_name.includes("danger")
+                                    ) {
+                                        eventClass = "important";
+                                    }
+
+                                    return `
+                                    <div class="big-screen-event-item ${eventClass}"
+                                         data-event-id="${event.id}"
+                                         data-event-name="${event.name}"
+                                         data-event-title="${event.title}"
+                                         data-event-start="${event.start}"
+                                         data-event-end="${event.end}"
+                                         onclick="showEventDetail(this)">
+                                        <div class="big-screen-event-item-title">
+                                            <span>${event.title}</span>
+                                        </div>
+                                        <div class="big-screen-event-item-time">
+                                            <span>${startTime} - ${endTime}</span>
+                                        </div>
+                                    </div>
+                                `;
+                                })
+                                .join("")}
+                `;
+            }
+
+            allEventsHTML += `</div></div>`;
         }
 
         if (upcomingEvents.length === 0) {
@@ -1118,6 +1198,9 @@ function showAllEventsFromToday() {
             // Generate HTML for all events grouped by date
             Object.keys(eventsByDate).forEach((date) => {
                 const events = eventsByDate[date];
+                if (date == todayString) {
+                    return;
+                }
                 allEventsHTML += `
                     <div class="all-events-date-group">
                         <div class="all-events-date-header">

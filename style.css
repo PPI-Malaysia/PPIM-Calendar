@@ -8,7 +8,7 @@ body::after {
     position: fixed;
     left: 0;
     width: 100vw;
-    height: 72px; /* adjust until the red stops tinting the bars */
+    height: 45px; /* adjust until the red stops tinting the bars */
     pointer-events: none;
     z-index: 1; /* stay above the ambient blobs but below other UI */
 }
@@ -850,11 +850,25 @@ body::after {
     font-weight: 600;
     font-size: 16px;
 }
-
+.closebtn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 16px;
+    font-size: 32px;
+}
 .all-events-date-content {
     padding-left: 0;
 }
-
+.m0 {
+    margin: 0;
+}
+.pclose {
+    padding-top: 0.23rem !important;
+    padding-bottom: 0.27rem !important;
+    padding-left: 0.26rem !important;
+    padding-right: 0.24rem !important;
+}
 /* Scroll styling for all events view */
 .big-screen-event-content {
     max-height: calc(100vh - 120px);
@@ -1044,6 +1058,11 @@ body::after {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08),
         inset 1px 1px 0 rgba(255, 255, 255, 0.6);
     transition: all 0.3s ease;
+}
+
+.liquid-bg-modal {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(3px) saturate(160%);
 }
 
 .liquid::before {

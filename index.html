@@ -29,6 +29,7 @@
         <link href="style.css?ver=6" rel="stylesheet" />
         <link rel="icon" type="image/x-icon" href="media/favicon.ico" />
         <meta name="theme-color" content="#ffffff" />
+        <meta name="color-scheme" content="dark light" />
     </head>
     <body>
         <!-- Loading overlay -->
@@ -54,13 +55,19 @@
             aria-hidden="true"
         >
             <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content modal-content-event">
-                    <button
-                        type="button"
-                        class="btn-close btn-close-modal"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
+                <div
+                    class="modal-content modal-content-event liquid liquid-bg-modal d-block"
+                >
+                    <div class="closebtn">
+                        <button
+                            type="button"
+                            class="btn-close btn-close-modal liquid m0 pclose"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        >
+                            &times;
+                        </button>
+                    </div>
                     <div class="modal-body">
                         <div class="event-detail-container">
                             <div
