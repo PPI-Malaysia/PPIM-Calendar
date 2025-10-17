@@ -30,7 +30,7 @@ body {
 .event-detail-category {
     display: inline-block;
     padding: 4px 12px;
-    border-radius: 20px;
+    border-radius: 2rem;
     font-size: 16px;
     font-weight: 600;
     text-transform: uppercase;
@@ -184,16 +184,38 @@ body {
 .big-screen-event-item.active .big-screen-event-item-time span {
     color: rgba(255, 255, 255, 0.9);
 }
-
+.ambient-red,
+.ambient-red-2 {
+    width: 380px;
+    height: 240px;
+    border-radius: 50%;
+    background: #b71c1c;
+    filter: blur(60px);
+    opacity: 0.15;
+    pointer-events: none;
+    transform: translate(30%, -30%);
+    z-index: 0;
+    position: fixed;
+}
+.ambient-red {
+    top: 18vh;
+    right: -20px;
+}
+.ambient-red-2 {
+    bottom: 0;
+    left: -10px;
+    margin-left: -150px;
+    margin-bottom: -100px;
+    opacity: 0.1;
+    z-index: 1;
+}
 /* Loading overlay */
 .loading-overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 115dvh;
-    background: url(https://ppimalaysia.id/images/noheadline-background.png)
-        no-repeat center center;
+    height: 100dvh;
     background-size: cover;
     display: flex;
     align-items: center;
@@ -336,7 +358,7 @@ body {
     height: 44px;
     border: 1px solid #ddd;
     background: white;
-    border-radius: 8px;
+    border-radius: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -360,8 +382,7 @@ body {
 }
 
 .small-calendar-grid {
-    background: white;
-    border-radius: 12px;
+    border-radius: 2rem;
     padding: 16px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
@@ -369,6 +390,7 @@ body {
 
 .small-weekdays {
     display: grid;
+    margin-top: 12px;
     grid-template-columns: repeat(7, 1fr);
     gap: 8px;
     margin-bottom: 12px;
@@ -381,11 +403,11 @@ body {
     padding: 8px 0;
     font-weight: 500;
 }
-
 .small-days-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 8px;
+    margin-bottom: 12px;
 }
 
 .small-day {
@@ -394,11 +416,10 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 16px;
-    border-radius: 8px;
+    border-radius: 1rem;
     cursor: pointer;
     transition: all 0.2s ease;
     position: relative;
-    background: white;
 }
 
 .small-day:hover {
@@ -440,8 +461,7 @@ body {
 }
 
 .small-events-section {
-    background: white;
-    border-radius: 12px;
+    border-radius: 2rem;
     padding: 16px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
@@ -529,12 +549,13 @@ body {
 }
 
 .no-events-small {
-    padding: 20px;
+    padding: 20px 10px;
+    margin: 5px 0;
+    width: 100%;
+    border-radius: 1rem;
     text-align: center;
     color: #666;
     font-style: italic;
-    background-color: #f8f9fa;
-    border-radius: 8px;
     border: 1px dashed #dee2e6;
     font-size: 16px;
 }
@@ -565,6 +586,8 @@ body {
 .big-screen-calendar {
     display: none;
     overflow: hidden;
+    max-height: 100vh;
+    max-height: 100dvh;
 }
 
 .big-screen-calendar-container {
@@ -717,12 +740,13 @@ body {
 
 /* No events message */
 .no-events {
-    padding: 20px;
+    padding: 20px 10px;
+    margin: 5px 0;
+    width: 100%;
+    border-radius: 1rem;
     text-align: center;
     color: #666;
     font-style: italic;
-    background-color: #f8f9fa;
-    border-radius: 8px;
     border: 1px dashed #dee2e6;
 }
 
@@ -836,6 +860,20 @@ body {
 
     .small-screen-calendar {
         display: block !important;
+    }
+    .ambient-red {
+        left: 0;
+        top: 0;
+        right: unset;
+        margin-left: -140px;
+        margin-top: -80px;
+    }
+    .ambient-red-2 {
+        right: 0;
+        bottom: 0;
+        left: unset;
+        margin-left: 0;
+        margin-bottom: -170px;
     }
 }
 
@@ -956,4 +994,73 @@ body {
         width: 100%;
         text-align: center;
     }
+}
+
+.w100 {
+    width: 100%;
+}
+/* Liquid */
+.liquid {
+    z-index: 4;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    border: none;
+    color: var(--black);
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(2px) saturate(160%);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08),
+        inset 1px 1px 0 rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+}
+
+.liquid::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.25),
+        rgba(255, 255, 255, 0.05)
+    );
+    pointer-events: none;
+}
+.liquid-btn {
+    z-index: 4;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--black);
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(2px) saturate(160%);
+    box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.6),
+        0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.liquid-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.25),
+        rgba(255, 255, 255, 0.05)
+    );
+    pointer-events: none;
+}
+
+.liquid-btn:active {
+    transform: scale(0.95);
 }
