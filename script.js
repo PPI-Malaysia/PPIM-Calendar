@@ -36,7 +36,7 @@ async function fetchCalendarData() {
     try {
         const response = await fetch(
             //"https://portal.ppimalaysia.id/assets/php/API/frontend-calendar.php"
-            "test.json"
+            "test-json-data.json"
         );
         const data = await response.json();
 
@@ -574,9 +574,11 @@ function showSmallAllEventsFromToday() {
                                     <span class="badge organizer-badge badge-red">
                                         PPI Malaysia
                                     </span>
-                                    <span class="badge organizer-badge badge-green">
-                                            Ongoing
-                                    </span>
+                                    ${isOngoingEvent(
+                                        event,
+                                        event.start,
+                                        event.end
+                                    )}
                                     </div>
                                     <div class="w100">
                                         <span class="event-date">${formatDateTime(
@@ -687,6 +689,10 @@ function isOngoingEvent(event, eventStart, eventEnd) {
     const end = new Date(eventEnd);
     if (now >= start && now <= end) {
         return `<span class="badge organizer-badge badge-green">Ongoing</span>`;
+    }
+    //else if ended
+    else if (now > end) {
+        return `<span class="badge organizer-badge badge-neutral">Ended</span>`;
     } else {
         return "";
     }

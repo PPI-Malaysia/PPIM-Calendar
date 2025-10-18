@@ -902,7 +902,14 @@ body::after {
 .big-screen-event-content::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
 }
-
+.row {
+    --bs-gutter-x: 0;
+}
+.mb-2 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    margin-bottom: unset !important;
+}
 /* Responsive breakpoints */
 @media (max-width: 991px) {
     .big-screen-calendar {
