@@ -310,52 +310,52 @@ function updateSmallEventDisplay(selectedDate) {
             eventsHTML += `
                 <div class="small-date-events-section">
                     <div class="small-date-events-header">
-                        <h6>Events List</h6>
                     </div>
                 </div>
+                <div class="row w100">
             `;
             // Add active events section if there are any for this date
             if (activeEvents.length > 0) {
                 eventsHTML += `
-                    <div class="small-active-events-content">
                         ${activeEvents
                             .map((event) => {
                                 const startTime = formatTime(event.start);
                                 const endTime = formatTime(event.end);
-
-                                // Map class names to our CSS classes
-                                let eventClass = "active"; // Special class for active events
-                                if (event.class_name.includes("success")) {
-                                    eventClass += " online-offline";
-                                } else if (event.class_name.includes("info")) {
-                                    eventClass += " meeting";
-                                } else if (
-                                    event.class_name.includes("warning")
-                                ) {
-                                    eventClass += " deadline";
-                                } else if (
-                                    event.class_name.includes("danger")
-                                ) {
-                                    eventClass += " important";
-                                } else {
-                                    eventClass += " other";
-                                }
-
                                 return `
-                                <div class="small-event-item ${eventClass}" 
-                                     data-event-id="${event.id}"
-                                     data-event-name="${event.name}"
-                                     data-event-title="${event.title}"
-                                     data-event-start="${event.start}"
-                                     data-event-end="${event.end}"
-                                     onclick="showEventDetail(this)">
-                                    <div class="small-event-item-title">${event.title} (Ongoing)</div>
-                                    <div class="small-event-item-time">${startTime} - ${endTime}</div>
+                                <div class="col-12 col-xl-6 mb-2">
+                                    <div class="event-card d-flex align-content-between flex-wrap"
+                                        data-event-id="${event.id}"
+                                        data-event-name="${event.name}"
+                                        data-event-title="${event.title}"
+                                        data-event-start="${event.start}"
+                                        data-event-end="${event.end}"
+                                        onclick="showEventDetail(this)"
+                                        >
+                                        <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
+                                        <span class="badge organizer-badge badge-red">
+                                            PPI Malaysia
+                                        </span>
+                                        ${isOngoingEvent(
+                                            event,
+                                            event.start,
+                                            event.end
+                                        )}
+                                        </div>
+                                        <div class="w100">
+                                           <span class="event-date">${formatDateTime(
+                                               event.start
+                                           )} - ${formatDateTime(
+                                    event.end
+                                )}</span><br>
+                                            <span class="event-title">${
+                                                event.title
+                                            }</span>
+                                        </div>
+                                    </div>
                                 </div>
                             `;
                             })
                             .join("")}
-                    </div>
             `;
             }
 
@@ -365,32 +365,34 @@ function updateSmallEventDisplay(selectedDate) {
                     const startTime = formatTime(event.start);
                     const endTime = formatTime(event.end);
 
-                    // Map class names to our CSS classes
-                    let eventClass = "other"; // default
-                    if (event.class_name.includes("success")) {
-                        eventClass = "online-offline";
-                    } else if (event.class_name.includes("info")) {
-                        eventClass = "meeting";
-                    } else if (event.class_name.includes("warning")) {
-                        eventClass = "deadline";
-                    } else if (event.class_name.includes("danger")) {
-                        eventClass = "important";
-                    }
-
                     return `
-                    <div class="small-event-item ${eventClass}"
-                         data-event-id="${event.id}"
-                         data-event-name="${event.name}"
-                         data-event-title="${event.title}"
-                         data-event-start="${event.start}"
-                         data-event-end="${event.end}"
-                         onclick="showEventDetail(this)">
-                        <div class="small-event-item-title">${event.title}</div>
-                        <div class="small-event-item-time">${startTime} - ${endTime}</div>
+                    <div class="col-12 col-xl-6 mb-2">
+                        <div class="event-card d-flex align-content-between flex-wrap"
+                            data-event-id="${event.id}"
+                            data-event-name="${event.name}"
+                            data-event-title="${event.title}"
+                            data-event-start="${event.start}"
+                            data-event-end="${event.end}"
+                            onclick="showEventDetail(this)"
+                            >
+                            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
+                            <span class="badge organizer-badge badge-red">
+                                PPI Malaysia
+                            </span>
+                            ${isOngoingEvent(event, event.start, event.end)}
+                            </div>
+                            <div class="w100">
+                                <span class="event-date">${formatDateTime(
+                                    event.start
+                                )} - ${formatDateTime(event.end)}</span><br>
+                                <span class="event-title">${event.title}</span>
+                            </div>
+                        </div>
                     </div>
                 `;
                 })
                 .join("");
+            eventsHTML += `</div>`;
         }
 
         contentElement.innerHTML = eventsHTML;
@@ -505,7 +507,7 @@ function showSmallAllEventsFromToday() {
                     <div class="small-all-events-date-header">
                         <h6>${todayDate}</h6>
                     </div>
-                    <div class="small-all-events-date-content">`;
+                    <div class="small-all-events-date-content row w100">`;
             if (activeEvents.length > 0) {
                 allEventsHTML += `
                         ${activeEvents
@@ -513,34 +515,37 @@ function showSmallAllEventsFromToday() {
                                 const startTime = formatTime(event.start);
                                 const endTime = formatTime(event.end);
 
-                                // Map class names to our CSS classes
-                                let eventClass = "active"; // Special class for active events
-                                if (event.class_name.includes("success")) {
-                                    eventClass += " online-offline";
-                                } else if (event.class_name.includes("info")) {
-                                    eventClass += " meeting";
-                                } else if (
-                                    event.class_name.includes("warning")
-                                ) {
-                                    eventClass += " deadline";
-                                } else if (
-                                    event.class_name.includes("danger")
-                                ) {
-                                    eventClass += " important";
-                                } else {
-                                    eventClass += " other";
-                                }
-
                                 return `
-                                <div class="small-event-item ${eventClass}"
-                                     data-event-id="${event.id}"
-                                     data-event-name="${event.name}"
-                                     data-event-title="${event.title}"
-                                     data-event-start="${event.start}"
-                                     data-event-end="${event.end}"
-                                     onclick="showEventDetail(this)">
-                                    <div class="small-event-item-title">${event.title} (Ongoing)</div>
-                                    <div class="small-event-item-time">${startTime} - ${endTime}</div>
+                                <div class="col-12 mb-2">
+                                    <div class="event-card d-flex align-content-between flex-wrap"
+                                        data-event-id="${event.id}"
+                                        data-event-name="${event.name}"
+                                        data-event-title="${event.title}"
+                                        data-event-start="${event.start}"
+                                        data-event-end="${event.end}"
+                                        onclick="showEventDetail(this)"
+                                        >
+                                        <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
+                                        <span class="badge organizer-badge badge-red">
+                                            PPI Malaysia
+                                        </span>
+                                        ${isOngoingEvent(
+                                            event,
+                                            event.start,
+                                            event.end
+                                        )}
+                                        </div>
+                                        <div class="w100">
+                                           <span class="event-date">${formatDateTime(
+                                               event.start
+                                           )} - ${formatDateTime(
+                                    event.end
+                                )}</span><br>
+                                            <span class="event-title">${
+                                                event.title
+                                            }</span>
+                                        </div>
+                                    </div>
                                 </div>
                             `;
                             })
@@ -555,29 +560,36 @@ function showSmallAllEventsFromToday() {
                             const startTime = formatTime(event.start);
                             const endTime = formatTime(event.end);
 
-                            // Map class names to our CSS classes
-                            let eventClass = "other"; // default
-                            if (event.class_name.includes("success")) {
-                                eventClass = "online-offline";
-                            } else if (event.class_name.includes("info")) {
-                                eventClass = "meeting";
-                            } else if (event.class_name.includes("warning")) {
-                                eventClass = "deadline";
-                            } else if (event.class_name.includes("danger")) {
-                                eventClass = "important";
-                            }
-
                             return `
-                                                        <div class="small-event-item ${eventClass}"
-                                                            data-event-id="${event.id}"
-                                                            data-event-name="${event.name}"
-                                                            data-event-title="${event.title}"
-                                                            data-event-start="${event.start}"
-                                                            data-event-end="${event.end}"
-                                                            onclick="showEventDetail(this)">
-                                                            <div class="small-event-item-title">${event.title}</div>
-                                                            <div class="small-event-item-time">${startTime} - ${endTime}</div>
-                                                        </div>
+                            <div class="col-12 mb-2">
+                                <div class="event-card d-flex align-content-between flex-wrap"
+                                    data-event-id="${event.id}"
+                                    data-event-name="${event.name}"
+                                    data-event-title="${event.title}"
+                                    data-event-start="${event.start}"
+                                    data-event-end="${event.end}"
+                                    onclick="showEventDetail(this)"
+                                    >
+                                    <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
+                                    <span class="badge organizer-badge badge-red">
+                                        PPI Malaysia
+                                    </span>
+                                    <span class="badge organizer-badge badge-green">
+                                            Ongoing
+                                    </span>
+                                    </div>
+                                    <div class="w100">
+                                        <span class="event-date">${formatDateTime(
+                                            event.start
+                                        )} - ${formatDateTime(
+                                event.end
+                            )}</span><br>
+                                        <span class="event-title">${
+                                            event.title
+                                        }</span>
+                                    </div>
+                                </div>
+                            </div>
                                                     `;
                         })
                         .join("")}
@@ -618,40 +630,43 @@ function showSmallAllEventsFromToday() {
                         <div class="small-all-events-date-header">
                             <h6>${formatDateForDisplay(date)}</h6>
                         </div>
-                        <div class="small-all-events-date-content">
+                        <div class="small-all-events-date-content row w100">
                             ${events
                                 .map((event) => {
                                     const startTime = formatTime(event.start);
                                     const endTime = formatTime(event.end);
 
-                                    // Map class names to our CSS classes
-                                    let eventClass = "other"; // default
-                                    if (event.class_name.includes("success")) {
-                                        eventClass = "online-offline";
-                                    } else if (
-                                        event.class_name.includes("info")
-                                    ) {
-                                        eventClass = "meeting";
-                                    } else if (
-                                        event.class_name.includes("warning")
-                                    ) {
-                                        eventClass = "deadline";
-                                    } else if (
-                                        event.class_name.includes("danger")
-                                    ) {
-                                        eventClass = "important";
-                                    }
-
                                     return `
-                                    <div class="small-event-item ${eventClass}"
-                                         data-event-id="${event.id}"
-                                         data-event-name="${event.name}"
-                                         data-event-title="${event.title}"
-                                         data-event-start="${event.start}"
-                                         data-event-end="${event.end}"
-                                         onclick="showEventDetail(this)">
-                                        <div class="small-event-item-title">${event.title}</div>
-                                        <div class="small-event-item-time">${startTime} - ${endTime}</div>
+                                    <div class="col-12 mb-2">
+                                        <div class="event-card d-flex align-content-between flex-wrap"
+                                            data-event-id="${event.id}"
+                                            data-event-name="${event.name}"
+                                            data-event-title="${event.title}"
+                                            data-event-start="${event.start}"
+                                            data-event-end="${event.end}"
+                                            onclick="showEventDetail(this)"
+                                            >
+                                            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
+                                            <span class="badge organizer-badge badge-red">
+                                                PPI Malaysia
+                                            </span>
+                                            ${isOngoingEvent(
+                                                event,
+                                                event.start,
+                                                event.end
+                                            )}
+                                            </div>
+                                            <div class="w100">
+                                                <span class="event-date">${formatDateTime(
+                                                    event.start
+                                                )} - ${formatDateTime(
+                                        event.end
+                                    )}</span><br>
+                                                <span class="event-title">${
+                                                    event.title
+                                                }</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 `;
                                 })
@@ -666,6 +681,16 @@ function showSmallAllEventsFromToday() {
     }
 }
 
+function isOngoingEvent(event, eventStart, eventEnd) {
+    const now = new Date();
+    const start = new Date(eventStart);
+    const end = new Date(eventEnd);
+    if (now >= start && now <= end) {
+        return `<span class="badge organizer-badge badge-green">Ongoing</span>`;
+    } else {
+        return "";
+    }
+}
 // Helper function to get events for a specific date
 function getEventsForDate(dateString) {
     return eventData.filter((event) => {
@@ -712,6 +737,28 @@ function formatDateForDisplay(dateString) {
     };
     return date.toLocaleDateString("en-GB", options);
 }
+
+function formatDateTime(dateString) {
+    const date = new Date(dateString);
+
+    // Use Intl.DateTimeFormat for locale-sensitive month abbreviation
+    const options = { month: "short" };
+    const monthAbbr = new Intl.DateTimeFormat("en-US", options).format(date);
+
+    // Get hours and minutes, ensuring two digits with leading zeros
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    // Get day of the month
+    const day = date.getDate().toString().padStart(2, "0");
+
+    return `${hours}:${minutes} ${day} ${monthAbbr}`;
+}
+
+// Example usage:
+const originalDateString = "2025-10-29 16:00:00";
+const formattedDate = formatDateTime(originalDateString);
+console.log(formattedDate); // Output: 16:00 29-10-2025
 
 // Helper function to format time
 function formatTime(timeString) {
@@ -877,54 +924,52 @@ function updateEventDisplay(selectedDate) {
                             <h6>Events List</h6>
                         </div>
                     </div>
+                    <div class="row">
                 `;
 
             // Add active events section if there are any for this date
             if (activeEvents.length > 0) {
                 eventsHTML += `
-                    <div class="active-events-content">
                         ${activeEvents
                             .map((event) => {
                                 const startTime = formatTime(event.start);
                                 const endTime = formatTime(event.end);
-
-                                // Map class names to our CSS classes
-                                let eventClass = "active"; // Special class for active events
-                                if (event.class_name.includes("success")) {
-                                    eventClass += " online-offline";
-                                } else if (event.class_name.includes("info")) {
-                                    eventClass += " meeting";
-                                } else if (
-                                    event.class_name.includes("warning")
-                                ) {
-                                    eventClass += " deadline";
-                                } else if (
-                                    event.class_name.includes("danger")
-                                ) {
-                                    eventClass += " important";
-                                } else {
-                                    eventClass += " other";
-                                }
-
                                 return `
-                                <div class="big-screen-event-item ${eventClass}"
-                                     data-event-id="${event.id}"
-                                     data-event-name="${event.name}"
-                                     data-event-title="${event.title}"
-                                     data-event-start="${event.start}"
-                                     data-event-end="${event.end}"
-                                     onclick="showEventDetail(this)">
-                                    <div class="big-screen-event-item-title">
-                                        <span>${event.title} (Ongoing)</span>
-                                    </div>
-                                    <div class="big-screen-event-item-time">
-                                        <span>${startTime} - ${endTime}</span>
+                                <div class="col-12 col-xl-6 mb-2">
+                                    <div class="event-card d-flex align-content-between flex-wrap"
+                                        data-event-id="${event.id}"
+                                        data-event-name="${event.name}"
+                                        data-event-title="${event.title}"
+                                        data-event-start="${event.start}"
+                                        data-event-end="${event.end}"
+                                        onclick="showEventDetail(this)"
+                                        >
+                                        <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
+                                        <span class="badge organizer-badge badge-red">
+                                            PPI Malaysia
+                                        </span>
+                                        ${isOngoingEvent(
+                                            event,
+                                            event.start,
+                                            event.end
+                                        )}
+                                        </div>
+                                        <div class="w100">
+                                           <span class="event-date">${formatDateTime(
+                                               event.start
+                                           )} - ${formatDateTime(
+                                    event.end
+                                )}</span><br>
+                                            <span class="event-title">${
+                                                event.title
+                                            }</span>
+                                            
+                                        </div>
                                     </div>
                                 </div>
                             `;
                             })
                             .join("")}
-                    </div>
             `;
             }
 
@@ -934,38 +979,35 @@ function updateEventDisplay(selectedDate) {
                     const startTime = formatTime(event.start);
                     const endTime = formatTime(event.end);
 
-                    // Map class names to our CSS classes
-                    let eventClass = "other"; // default
-                    if (event.class_name.includes("success")) {
-                        eventClass = "online-offline";
-                    } else if (event.class_name.includes("info")) {
-                        eventClass = "meeting";
-                    } else if (event.class_name.includes("warning")) {
-                        eventClass = "deadline";
-                    } else if (event.class_name.includes("danger")) {
-                        eventClass = "important";
-                    }
-
                     return `
-                    <div class="big-screen-event-item ${eventClass}"
-                         data-event-id="${event.id}"
-                         data-event-name="${event.name}"
-                         data-event-title="${event.title}"
-                         data-event-start="${event.start}"
-                         data-event-end="${event.end}"
-                         onclick="showEventDetail(this)">
-                        <div class="big-screen-event-item-title">
-                            <span>${event.title}</span>
-                        </div>
-                        <div class="big-screen-event-item-time">
-                            <span>${startTime} - ${endTime}</span>
+                    <div class="col-12 col-xl-6 mb-2">
+                        <div class="event-card d-flex align-content-between flex-wrap"
+                            data-event-id="${event.id}"
+                            data-event-name="${event.name}"
+                            data-event-title="${event.title}"
+                            data-event-start="${event.start}"
+                            data-event-end="${event.end}"
+                            onclick="showEventDetail(this)"
+                            >
+                            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
+                            <span class="badge organizer-badge badge-red">
+                                PPI Malaysia
+                            </span>
+                            ${isOngoingEvent(event, event.start, event.end)}
+                            </div>
+                            <div class="w100">
+                                <span class="event-date">${formatDateTime(
+                                    event.start
+                                )} - ${formatDateTime(event.end)}</span><br>
+                                <span class="event-title">${event.title}</span>
+                            </div>
                         </div>
                     </div>
                 `;
                 })
                 .join("");
         }
-
+        eventsHTML += `</div>`;
         contentElement.innerHTML = eventsHTML;
     }
 }
@@ -1073,11 +1115,11 @@ function showAllEventsFromToday() {
             //get date today and then put it on formatDateForDisplay
             const todayDate = formatDateForDisplay(todayString);
             allEventsHTML += `
-             <div class="all-events-date-group">
+                <div class="all-events-date-group">
                     <div class="all-events-date-header">
                         <h6>${todayDate}</h6>
                     </div>
-                    <div class="all-events-date-content">
+                    <div class="all-events-date-content row">
                     `;
             if (activeEvents.length > 0) {
                 allEventsHTML += `
@@ -1086,37 +1128,37 @@ function showAllEventsFromToday() {
                                 const startTime = formatTime(event.start);
                                 const endTime = formatTime(event.end);
 
-                                // Map class names to our CSS classes
-                                let eventClass = "active"; // Special class for active events
-                                if (event.class_name.includes("success")) {
-                                    eventClass += " online-offline";
-                                } else if (event.class_name.includes("info")) {
-                                    eventClass += " meeting";
-                                } else if (
-                                    event.class_name.includes("warning")
-                                ) {
-                                    eventClass += " deadline";
-                                } else if (
-                                    event.class_name.includes("danger")
-                                ) {
-                                    eventClass += " important";
-                                } else {
-                                    eventClass += " other";
-                                }
-
                                 return `
-                                <div class="big-screen-event-item ${eventClass}"
-                                     data-event-id="${event.id}"
-                                     data-event-name="${event.name}"
-                                     data-event-title="${event.title}"
-                                     data-event-start="${event.start}"
-                                     data-event-end="${event.end}"
-                                     onclick="showEventDetail(this)">
-                                    <div class="big-screen-event-item-title">
-                                        <span>${event.title} (Ongoing)</span>
-                                    </div>
-                                    <div class="big-screen-event-item-time">
-                                        <span>${startTime} - ${endTime}</span>
+                                <div class="col-12 col-xl-6 mb-2">
+                                    <div class="event-card d-flex align-content-between flex-wrap"
+                                        data-event-id="${event.id}"
+                                        data-event-name="${event.name}"
+                                        data-event-title="${event.title}"
+                                        data-event-start="${event.start}"
+                                        data-event-end="${event.end}"
+                                        onclick="showEventDetail(this)"
+                                        >
+                                        <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
+                                        <span class="badge organizer-badge badge-red">
+                                            PPI Malaysia
+                                        </span>
+                                        ${isOngoingEvent(
+                                            event,
+                                            event.start,
+                                            event.end
+                                        )}
+                                        </div>
+                                        <div class="w100">
+                                           <span class="event-date">${formatDateTime(
+                                               event.start
+                                           )} - ${formatDateTime(
+                                    event.end
+                                )}</span>
+                                            <br>
+                                            <span class="event-title">${
+                                                event.title
+                                            }</span>
+                                        </div>
                                     </div>
                                 </div>
                             `;
@@ -1132,37 +1174,36 @@ function showAllEventsFromToday() {
                                     const startTime = formatTime(event.start);
                                     const endTime = formatTime(event.end);
 
-                                    // Map class names to our CSS classes
-                                    let eventClass = "other"; // default
-                                    if (event.class_name.includes("success")) {
-                                        eventClass = "online-offline";
-                                    } else if (
-                                        event.class_name.includes("info")
-                                    ) {
-                                        eventClass = "meeting";
-                                    } else if (
-                                        event.class_name.includes("warning")
-                                    ) {
-                                        eventClass = "deadline";
-                                    } else if (
-                                        event.class_name.includes("danger")
-                                    ) {
-                                        eventClass = "important";
-                                    }
-
                                     return `
-                                    <div class="big-screen-event-item ${eventClass}"
-                                         data-event-id="${event.id}"
-                                         data-event-name="${event.name}"
-                                         data-event-title="${event.title}"
-                                         data-event-start="${event.start}"
-                                         data-event-end="${event.end}"
-                                         onclick="showEventDetail(this)">
-                                        <div class="big-screen-event-item-title">
-                                            <span>${event.title}</span>
-                                        </div>
-                                        <div class="big-screen-event-item-time">
-                                            <span>${startTime} - ${endTime}</span>
+                                    <div class="col-12 col-xl-6 mb-2">
+                                        <div class="event-card d-flex align-content-between flex-wrap"
+                                            data-event-id="${event.id}"
+                                            data-event-name="${event.name}"
+                                            data-event-title="${event.title}"
+                                            data-event-start="${event.start}"
+                                            data-event-end="${event.end}"
+                                            onclick="showEventDetail(this)"
+                                            >
+                                            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
+                                            <span class="badge organizer-badge badge-red">
+                                                PPI Malaysia
+                                            </span>
+                                            ${isOngoingEvent(
+                                                event,
+                                                event.start,
+                                                event.end
+                                            )}
+                                            </div>
+                                            <div class="w100">
+                                                <span class="event-date">${formatDateTime(
+                                                    event.start
+                                                )} - ${formatDateTime(
+                                        event.end
+                                    )}</span><br>
+                                                <span class="event-title">${
+                                                    event.title
+                                                }</span>
+                                            </div>
                                         </div>
                                     </div>
                                 `;
@@ -1206,43 +1247,42 @@ function showAllEventsFromToday() {
                         <div class="all-events-date-header">
                             <h6>${formatDateForDisplay(date)}</h6>
                         </div>
-                        <div class="all-events-date-content">
+                        <div class="all-events-date-content row">
                             ${events
                                 .map((event) => {
                                     const startTime = formatTime(event.start);
                                     const endTime = formatTime(event.end);
 
-                                    // Map class names to our CSS classes
-                                    let eventClass = "other"; // default
-                                    if (event.class_name.includes("success")) {
-                                        eventClass = "online-offline";
-                                    } else if (
-                                        event.class_name.includes("info")
-                                    ) {
-                                        eventClass = "meeting";
-                                    } else if (
-                                        event.class_name.includes("warning")
-                                    ) {
-                                        eventClass = "deadline";
-                                    } else if (
-                                        event.class_name.includes("danger")
-                                    ) {
-                                        eventClass = "important";
-                                    }
-
                                     return `
-                                    <div class="big-screen-event-item ${eventClass}"
-                                         data-event-id="${event.id}"
-                                         data-event-name="${event.name}"
-                                         data-event-title="${event.title}"
-                                         data-event-start="${event.start}"
-                                         data-event-end="${event.end}"
-                                         onclick="showEventDetail(this)">
-                                        <div class="big-screen-event-item-title">
-                                            <span>${event.title}</span>
-                                        </div>
-                                        <div class="big-screen-event-item-time">
-                                            <span>${startTime} - ${endTime}</span>
+                                    <div class="col-12 col-xl-6 mb-2">
+                                        <div class="event-card d-flex align-content-between flex-wrap"
+                                            data-event-id="${event.id}"
+                                            data-event-name="${event.name}"
+                                            data-event-title="${event.title}"
+                                            data-event-start="${event.start}"
+                                            data-event-end="${event.end}"
+                                            onclick="showEventDetail(this)"
+                                            >
+                                            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
+                                            <span class="badge organizer-badge badge-red">
+                                                PPI Malaysia
+                                            </span>
+                                            ${isOngoingEvent(
+                                                event,
+                                                event.start,
+                                                event.end
+                                            )}
+                                            </div>
+                                            <div class="w100">
+                                                <span class="event-date">${formatDateTime(
+                                                    event.start
+                                                )} - ${formatDateTime(
+                                        event.end
+                                    )}</span><br>
+                                                <span class="event-title">${
+                                                    event.title
+                                                }</span>
+                                            </div>
                                         </div>
                                     </div>
                                 `;
@@ -1253,7 +1293,6 @@ function showAllEventsFromToday() {
                 `;
             });
         }
-
         contentElement.innerHTML = allEventsHTML;
     }
 }

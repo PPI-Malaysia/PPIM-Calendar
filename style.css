@@ -31,6 +31,9 @@ body::after {
     );
 }
 
+.test {
+    border: dotted 1px red;
+}
 .page-container {
     display: flex;
     justify-content: center;
@@ -530,8 +533,12 @@ body::after {
     height: calc(100dvh - calc(100vw + 150px));
     min-height: 320px;
     overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
-
+.small-events-content::-webkit-scrollbar {
+    display: none;
+}
 /* Small screen event items */
 .small-event-item {
     padding: 12px;
@@ -875,6 +882,7 @@ body::after {
     max-height: calc(100dvh - 120px);
     overflow-y: auto;
     padding-right: 10px;
+    padding-top: 30px !important;
 }
 
 .big-screen-event-content::-webkit-scrollbar {
@@ -1111,4 +1119,58 @@ body::after {
 
 .liquid-btn:active {
     transform: scale(0.95);
+}
+
+/* event card */
+.event-card {
+    border-radius: 10px;
+    border: solid 1px #eeeff2;
+    padding: 10px;
+    width: 100%;
+    height: 240px;
+    margin-bottom: 20px;
+}
+.badge-neutral {
+    color: #6b7280 !important;
+    background-color: #f3f4f6 !important;
+}
+.badge-green {
+    color: #4caf50 !important;
+    background-color: #e8f5e9 !important;
+}
+.badge-neutral:hover {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+.organizer-badge {
+    font-weight: 400;
+    border-radius: 4px;
+    font-size: clamp(14px, 1vw, 18px) !important;
+    border-radius: 0.5rem;
+}
+.badge-red {
+    color: #f90203;
+    background-color: #feeaeb;
+}
+.event-title {
+    font-size: clamp(18px, 2vw, 24px);
+    font-weight: 600;
+    color: #1f2937;
+    line-height: 1.3;
+    margin-bottom: 10px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.event-date {
+    font-size: clamp(14px, 1.2vw, 16px);
+    color: #6b7280;
+    font-weight: 400;
+}
+.event-location {
+    font-size: clamp(14px, 1.2vw, 16px);
+    color: #6b7280;
+    font-weight: 600;
 }
