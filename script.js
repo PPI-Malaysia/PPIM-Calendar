@@ -35,7 +35,8 @@ const monthNames = [
 async function fetchCalendarData() {
     try {
         const response = await fetch(
-            "https://portal.ppimalaysia.id/assets/php/API/frontend-calendar.php"
+            //"https://portal.ppimalaysia.id/assets/php/API/frontend-calendar.php"
+            "test-json-data.json"
         );
         const data = await response.json();
 
@@ -322,11 +323,9 @@ function updateSmallEventDisplay(selectedDate) {
                                 const endTime = formatTime(event.end);
                                 return `
                                 <div class="col-12 col-xl-6 mb-2">
-                                    <div class="event-card d-flex align-content-between flex-wrap"
-                                         onclick='showEventDetail(${JSON.stringify(
-                                             event
-                                         )})'
-                                        >
+                                    <div class="event-card d-flex align-content-between flex-wrap" onclick="showEventDetail('${
+                                        event.id
+                                    }')">
                                         <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
                                         ${eventOrganizer(
                                             event.isCampus,
@@ -363,9 +362,9 @@ function updateSmallEventDisplay(selectedDate) {
 
                     return `
                     <div class="col-12 col-xl-6 mb-2">
-                        <div class="event-card d-flex align-content-between flex-wrap"
-                             onclick='showEventDetail(${JSON.stringify(event)})'
-                            >
+                        <div class="event-card d-flex align-content-between flex-wrap" onclick="showEventDetail('${
+                            event.id
+                        }')">
                             <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
                             ${eventOrganizer(event.isCampus, event.name)}
                             ${isOngoingEvent(event, event.start, event.end)}
@@ -507,11 +506,9 @@ function showSmallAllEventsFromToday() {
 
                                 return `
                                 <div class="col-12 mb-2">
-                                    <div class="event-card d-flex align-content-between flex-wrap"
-                                         onclick='showEventDetail(${JSON.stringify(
-                                             event
-                                         )})'
-                                        >
+                                    <div class="event-card d-flex align-content-between flex-wrap" onclick="showEventDetail('${
+                                        event.id
+                                    }')">
                                         <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
                                        ${eventOrganizer(
                                            event.isCampus,
@@ -549,11 +546,9 @@ function showSmallAllEventsFromToday() {
 
                             return `
                             <div class="col-12 mb-2">
-                                <div class="event-card d-flex align-content-between flex-wrap"
-                                     onclick='showEventDetail(${JSON.stringify(
-                                         event
-                                     )})'
-                                    >
+                                <div class="event-card d-flex align-content-between flex-wrap" onclick="showEventDetail('${
+                                    event.id
+                                }')">
                                     <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
                                     ${eventOrganizer(
                                         event.isCampus,
@@ -624,11 +619,9 @@ function showSmallAllEventsFromToday() {
 
                                     return `
                                     <div class="col-12 mb-2">
-                                        <div class="event-card d-flex align-content-between flex-wrap"
-                                             onclick='showEventDetail(${JSON.stringify(
-                                                 event
-                                             )})'
-                                            >
+                                        <div class="event-card d-flex align-content-between flex-wrap" onclick="showEventDetail('${
+                                            event.id
+                                        }')">
                                             <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
                                             ${eventOrganizer(
                                                 event.isCampus,
@@ -923,10 +916,9 @@ function updateEventDisplay(selectedDate) {
                                 const endTime = formatTime(event.end);
                                 return `
                                 <div class="col-12 col-xl-6 mb-2">
-                                    <div class="event-card d-flex align-content-between flex-wrap"
-                                        onclick='showEventDetail(${JSON.stringify(
-                                            event
-                                        )})'>
+                                    <div class="event-card d-flex align-content-between flex-wrap" onclick="showEventDetail('${
+                                        event.id
+                                    }')">
                                         <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
                                         ${eventOrganizer(
                                             event.isCampus,
@@ -964,9 +956,9 @@ function updateEventDisplay(selectedDate) {
 
                     return `
                     <div class="col-12 col-xl-6 mb-2">
-                        <div class="event-card d-flex align-content-between flex-wrap"
-                             onclick='showEventDetail(${JSON.stringify(event)})'
-                            >
+                        <div class="event-card d-flex align-content-between flex-wrap" onclick="showEventDetail('${
+                            event.id
+                        }')">
                             <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
                             ${eventOrganizer(event.isCampus, event.name)}
                             ${isOngoingEvent(event, event.start, event.end)}
@@ -1114,11 +1106,9 @@ function showAllEventsFromToday() {
 
                                 return `
                                 <div class="col-12 col-xl-6 mb-2">
-                                    <div class="event-card d-flex align-content-between flex-wrap"
-                                         onclick='showEventDetail(${JSON.stringify(
-                                             event
-                                         )})'
-                                        >
+                                    <div class="event-card d-flex align-content-between flex-wrap" onclick="showEventDetail('${
+                                        event.id
+                                    }')">
                                         <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
                                         ${eventOrganizer(
                                             event.isCampus,
@@ -1157,11 +1147,9 @@ function showAllEventsFromToday() {
 
                                     return `
                                     <div class="col-12 col-xl-6 mb-2">
-                                        <div class="event-card d-flex align-content-between flex-wrap"
-                                             onclick='showEventDetail(${JSON.stringify(
-                                                 event
-                                             )})'
-                                            >
+                                        <div class="event-card d-flex align-content-between flex-wrap" onclick="showEventDetail('${
+                                            event.id
+                                        }')">
                                             <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
                                             ${eventOrganizer(
                                                 event.isCampus,
@@ -1233,11 +1221,9 @@ function showAllEventsFromToday() {
 
                                     return `
                                     <div class="col-12 col-xl-6 mb-2">
-                                        <div class="event-card d-flex align-content-between flex-wrap"
-                                             onclick='showEventDetail(${JSON.stringify(
-                                                 event
-                                             )})'
-                                            >
+                                        <div class="event-card d-flex align-content-between flex-wrap" onclick="showEventDetail('${
+                                            event.id
+                                        }')">
                                             <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
                                             ${eventOrganizer(
                                                 event.isCampus,
@@ -1273,6 +1259,7 @@ function showAllEventsFromToday() {
 }
 function formatEventDates(startStr, endStr) {
     const formatDatePart = (date) => {
+        // All dates are in Malaysia time, so we set the timeZone option
         const optionsDate = {
             weekday: "short",
             day: "numeric",
@@ -1281,7 +1268,8 @@ function formatEventDates(startStr, endStr) {
         };
         const parts = new Intl.DateTimeFormat(
             "en-US",
-            optionsDate
+            // Set timezone to Malaysia
+            { ...optionsDate, timeZone: "Asia/Kuala_Lumpur" }
         ).formatToParts(date);
         const dayOfWeek = parts.find((p) => p.type === "weekday").value;
         const dayOfMonth = parts.find((p) => p.type === "day").value;
@@ -1295,11 +1283,16 @@ function formatEventDates(startStr, endStr) {
             hour: "2-digit",
             minute: "2-digit",
             hour12: false,
+            timeZone: "Asia/Kuala_Lumpur", // Set timezone to Malaysia
         };
         return new Intl.DateTimeFormat("en-US", optionsTime).format(date);
     };
-    const startDate = new Date(startStr.replace(" ", "T"));
-    const endDate = new Date(endStr.replace(" ", "T"));
+
+    // Append 'Z' to treat the time as UTC, then format it for Malaysia time.
+    // This avoids issues with local browser timezones.
+    // We assume the server provides time in a format that can be treated as UTC for this conversion.
+    const startDate = new Date(startStr.replace(" ", "T") + "Z");
+    const endDate = new Date(endStr.replace(" ", "T") + "Z");
 
     if (isNaN(startDate) || isNaN(endDate)) {
         return "Error: Invalid Date/Time Input";
@@ -1327,7 +1320,15 @@ function formatEventDates(startStr, endStr) {
 }
 
 //Function to show event detail modal
-function showEventDetail(event) {
+function showEventDetail(eventId) {
+    const event =
+        eventData.find((e) => e.id === eventId) ||
+        activeEventData.find((e) => e.id === eventId);
+
+    if (!event) {
+        console.error("Event not found:", eventId);
+        return;
+    }
     console.log("Showing details for event:", event);
 
     // Update modal content
