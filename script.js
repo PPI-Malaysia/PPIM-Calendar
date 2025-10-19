@@ -35,8 +35,7 @@ const monthNames = [
 async function fetchCalendarData() {
     try {
         const response = await fetch(
-            //"https://portal.ppimalaysia.id/assets/php/API/frontend-calendar.php"
-            "test-json-data.json"
+            "https://portal.ppimalaysia.id/assets/php/API/frontend-calendar.php"
         );
         const data = await response.json();
 
@@ -324,17 +323,15 @@ function updateSmallEventDisplay(selectedDate) {
                                 return `
                                 <div class="col-12 col-xl-6 mb-2">
                                     <div class="event-card d-flex align-content-between flex-wrap"
-                                        data-event-id="${event.id}"
-                                        data-event-name="${event.name}"
-                                        data-event-title="${event.title}"
-                                        data-event-start="${event.start}"
-                                        data-event-end="${event.end}"
-                                        onclick="showEventDetail(this)"
+                                         onclick='showEventDetail(${JSON.stringify(
+                                             event
+                                         )})'
                                         >
                                         <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
-                                        <span class="badge organizer-badge badge-red">
-                                            PPI Malaysia
-                                        </span>
+                                        ${eventOrganizer(
+                                            event.isCampus,
+                                            event.name
+                                        )}
                                         ${isOngoingEvent(
                                             event,
                                             event.start,
@@ -342,11 +339,10 @@ function updateSmallEventDisplay(selectedDate) {
                                         )}
                                         </div>
                                         <div class="w100">
-                                           <span class="event-date">${formatDateTime(
-                                               event.start
-                                           )} - ${formatDateTime(
-                                    event.end
-                                )}</span><br>
+                                           <span class="event-date">${formatEventDates(
+                                               event.start,
+                                               event.end
+                                           )}</span><br>
                                             <span class="event-title">${
                                                 event.title
                                             }</span>
@@ -368,23 +364,17 @@ function updateSmallEventDisplay(selectedDate) {
                     return `
                     <div class="col-12 col-xl-6 mb-2">
                         <div class="event-card d-flex align-content-between flex-wrap"
-                            data-event-id="${event.id}"
-                            data-event-name="${event.name}"
-                            data-event-title="${event.title}"
-                            data-event-start="${event.start}"
-                            data-event-end="${event.end}"
-                            onclick="showEventDetail(this)"
+                             onclick='showEventDetail(${JSON.stringify(event)})'
                             >
                             <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
-                            <span class="badge organizer-badge badge-red">
-                                PPI Malaysia
-                            </span>
+                            ${eventOrganizer(event.isCampus, event.name)}
                             ${isOngoingEvent(event, event.start, event.end)}
                             </div>
                             <div class="w100">
-                                <span class="event-date">${formatDateTime(
-                                    event.start
-                                )} - ${formatDateTime(event.end)}</span><br>
+                                <span class="event-date">${formatEventDates(
+                                    event.start,
+                                    event.end
+                                )}</span><br>
                                 <span class="event-title">${event.title}</span>
                             </div>
                         </div>
@@ -518,17 +508,15 @@ function showSmallAllEventsFromToday() {
                                 return `
                                 <div class="col-12 mb-2">
                                     <div class="event-card d-flex align-content-between flex-wrap"
-                                        data-event-id="${event.id}"
-                                        data-event-name="${event.name}"
-                                        data-event-title="${event.title}"
-                                        data-event-start="${event.start}"
-                                        data-event-end="${event.end}"
-                                        onclick="showEventDetail(this)"
+                                         onclick='showEventDetail(${JSON.stringify(
+                                             event
+                                         )})'
                                         >
                                         <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
-                                        <span class="badge organizer-badge badge-red">
-                                            PPI Malaysia
-                                        </span>
+                                       ${eventOrganizer(
+                                           event.isCampus,
+                                           event.name
+                                       )}
                                         ${isOngoingEvent(
                                             event,
                                             event.start,
@@ -536,11 +524,10 @@ function showSmallAllEventsFromToday() {
                                         )}
                                         </div>
                                         <div class="w100">
-                                           <span class="event-date">${formatDateTime(
-                                               event.start
-                                           )} - ${formatDateTime(
-                                    event.end
-                                )}</span><br>
+                                           <span class="event-date">${formatEventDates(
+                                               event.start,
+                                               event.end
+                                           )}</span><br>
                                             <span class="event-title">${
                                                 event.title
                                             }</span>
@@ -563,17 +550,15 @@ function showSmallAllEventsFromToday() {
                             return `
                             <div class="col-12 mb-2">
                                 <div class="event-card d-flex align-content-between flex-wrap"
-                                    data-event-id="${event.id}"
-                                    data-event-name="${event.name}"
-                                    data-event-title="${event.title}"
-                                    data-event-start="${event.start}"
-                                    data-event-end="${event.end}"
-                                    onclick="showEventDetail(this)"
+                                     onclick='showEventDetail(${JSON.stringify(
+                                         event
+                                     )})'
                                     >
                                     <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
-                                    <span class="badge organizer-badge badge-red">
-                                        PPI Malaysia
-                                    </span>
+                                    ${eventOrganizer(
+                                        event.isCampus,
+                                        event.name
+                                    )}
                                     ${isOngoingEvent(
                                         event,
                                         event.start,
@@ -581,11 +566,10 @@ function showSmallAllEventsFromToday() {
                                     )}
                                     </div>
                                     <div class="w100">
-                                        <span class="event-date">${formatDateTime(
-                                            event.start
-                                        )} - ${formatDateTime(
-                                event.end
-                            )}</span><br>
+                                        <span class="event-date">${formatEventDates(
+                                            event.start,
+                                            event.end
+                                        )}</span><br>
                                         <span class="event-title">${
                                             event.title
                                         }</span>
@@ -641,17 +625,15 @@ function showSmallAllEventsFromToday() {
                                     return `
                                     <div class="col-12 mb-2">
                                         <div class="event-card d-flex align-content-between flex-wrap"
-                                            data-event-id="${event.id}"
-                                            data-event-name="${event.name}"
-                                            data-event-title="${event.title}"
-                                            data-event-start="${event.start}"
-                                            data-event-end="${event.end}"
-                                            onclick="showEventDetail(this)"
+                                             onclick='showEventDetail(${JSON.stringify(
+                                                 event
+                                             )})'
                                             >
                                             <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
-                                            <span class="badge organizer-badge badge-red">
-                                                PPI Malaysia
-                                            </span>
+                                            ${eventOrganizer(
+                                                event.isCampus,
+                                                event.name
+                                            )}
                                             ${isOngoingEvent(
                                                 event,
                                                 event.start,
@@ -659,11 +641,10 @@ function showSmallAllEventsFromToday() {
                                             )}
                                             </div>
                                             <div class="w100">
-                                                <span class="event-date">${formatDateTime(
-                                                    event.start
-                                                )} - ${formatDateTime(
-                                        event.end
-                                    )}</span><br>
+                                                <span class="event-date">${formatEventDates(
+                                                    event.start,
+                                                    event.end
+                                                )}</span><br>
                                                 <span class="event-title">${
                                                     event.title
                                                 }</span>
@@ -943,17 +924,14 @@ function updateEventDisplay(selectedDate) {
                                 return `
                                 <div class="col-12 col-xl-6 mb-2">
                                     <div class="event-card d-flex align-content-between flex-wrap"
-                                        data-event-id="${event.id}"
-                                        data-event-name="${event.name}"
-                                        data-event-title="${event.title}"
-                                        data-event-start="${event.start}"
-                                        data-event-end="${event.end}"
-                                        onclick="showEventDetail(this)"
-                                        >
+                                        onclick='showEventDetail(${JSON.stringify(
+                                            event
+                                        )})'>
                                         <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
-                                        <span class="badge organizer-badge badge-red">
-                                            PPI Malaysia
-                                        </span>
+                                        ${eventOrganizer(
+                                            event.isCampus,
+                                            event.name
+                                        )}
                                         ${isOngoingEvent(
                                             event,
                                             event.start,
@@ -961,11 +939,10 @@ function updateEventDisplay(selectedDate) {
                                         )}
                                         </div>
                                         <div class="w100">
-                                           <span class="event-date">${formatDateTime(
-                                               event.start
-                                           )} - ${formatDateTime(
-                                    event.end
-                                )}</span><br>
+                                           <span class="event-date">${formatEventDates(
+                                               event.start,
+                                               event.end
+                                           )}</span><br>
                                             <span class="event-title">${
                                                 event.title
                                             }</span>
@@ -988,23 +965,17 @@ function updateEventDisplay(selectedDate) {
                     return `
                     <div class="col-12 col-xl-6 mb-2">
                         <div class="event-card d-flex align-content-between flex-wrap"
-                            data-event-id="${event.id}"
-                            data-event-name="${event.name}"
-                            data-event-title="${event.title}"
-                            data-event-start="${event.start}"
-                            data-event-end="${event.end}"
-                            onclick="showEventDetail(this)"
+                             onclick='showEventDetail(${JSON.stringify(event)})'
                             >
                             <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
-                            <span class="badge organizer-badge badge-red">
-                                PPI Malaysia
-                            </span>
+                            ${eventOrganizer(event.isCampus, event.name)}
                             ${isOngoingEvent(event, event.start, event.end)}
                             </div>
                             <div class="w100">
-                                <span class="event-date">${formatDateTime(
-                                    event.start
-                                )} - ${formatDateTime(event.end)}</span><br>
+                                <span class="event-date">${formatEventDates(
+                                    event.start,
+                                    event.end
+                                )}</span><br>
                                 <span class="event-title">${event.title}</span>
                             </div>
                         </div>
@@ -1018,6 +989,13 @@ function updateEventDisplay(selectedDate) {
     }
 }
 
+//function to determine the event organizer
+function eventOrganizer(isCampus, name) {
+    if (isCampus === "false") {
+        return '<span class="badge organizer-badge badge-red">PPI Malaysia</span>';
+    }
+    return `<span class="badge organizer-badge badge-neutral">${name}</span>`;
+}
 // Function to setup the All Events button
 function setupAllEventsButton() {
     const allEventsButton = document.getElementById("bigAllEventsBtn");
@@ -1137,17 +1115,15 @@ function showAllEventsFromToday() {
                                 return `
                                 <div class="col-12 col-xl-6 mb-2">
                                     <div class="event-card d-flex align-content-between flex-wrap"
-                                        data-event-id="${event.id}"
-                                        data-event-name="${event.name}"
-                                        data-event-title="${event.title}"
-                                        data-event-start="${event.start}"
-                                        data-event-end="${event.end}"
-                                        onclick="showEventDetail(this)"
+                                         onclick='showEventDetail(${JSON.stringify(
+                                             event
+                                         )})'
                                         >
                                         <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
-                                        <span class="badge organizer-badge badge-red">
-                                            PPI Malaysia
-                                        </span>
+                                        ${eventOrganizer(
+                                            event.isCampus,
+                                            event.name
+                                        )}
                                         ${isOngoingEvent(
                                             event,
                                             event.start,
@@ -1155,11 +1131,10 @@ function showAllEventsFromToday() {
                                         )}
                                         </div>
                                         <div class="w100">
-                                           <span class="event-date">${formatDateTime(
-                                               event.start
-                                           )} - ${formatDateTime(
-                                    event.end
-                                )}</span>
+                                           <span class="event-date">${formatEventDates(
+                                               event.start,
+                                               event.end
+                                           )}</span>
                                             <br>
                                             <span class="event-title">${
                                                 event.title
@@ -1183,17 +1158,15 @@ function showAllEventsFromToday() {
                                     return `
                                     <div class="col-12 col-xl-6 mb-2">
                                         <div class="event-card d-flex align-content-between flex-wrap"
-                                            data-event-id="${event.id}"
-                                            data-event-name="${event.name}"
-                                            data-event-title="${event.title}"
-                                            data-event-start="${event.start}"
-                                            data-event-end="${event.end}"
-                                            onclick="showEventDetail(this)"
+                                             onclick='showEventDetail(${JSON.stringify(
+                                                 event
+                                             )})'
                                             >
                                             <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
-                                            <span class="badge organizer-badge badge-red">
-                                                PPI Malaysia
-                                            </span>
+                                            ${eventOrganizer(
+                                                event.isCampus,
+                                                event.name
+                                            )}
                                             ${isOngoingEvent(
                                                 event,
                                                 event.start,
@@ -1201,11 +1174,10 @@ function showAllEventsFromToday() {
                                             )}
                                             </div>
                                             <div class="w100">
-                                                <span class="event-date">${formatDateTime(
-                                                    event.start
-                                                )} - ${formatDateTime(
-                                        event.end
-                                    )}</span><br>
+                                                <span class="event-date">${formatEventDates(
+                                                    event.start,
+                                                    event.end
+                                                )}</span><br>
                                                 <span class="event-title">${
                                                     event.title
                                                 }</span>
@@ -1262,17 +1234,15 @@ function showAllEventsFromToday() {
                                     return `
                                     <div class="col-12 col-xl-6 mb-2">
                                         <div class="event-card d-flex align-content-between flex-wrap"
-                                            data-event-id="${event.id}"
-                                            data-event-name="${event.name}"
-                                            data-event-title="${event.title}"
-                                            data-event-start="${event.start}"
-                                            data-event-end="${event.end}"
-                                            onclick="showEventDetail(this)"
+                                             onclick='showEventDetail(${JSON.stringify(
+                                                 event
+                                             )})'
                                             >
                                             <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between w100">
-                                            <span class="badge organizer-badge badge-red">
-                                                PPI Malaysia
-                                            </span>
+                                            ${eventOrganizer(
+                                                event.isCampus,
+                                                event.name
+                                            )}
                                             ${isOngoingEvent(
                                                 event,
                                                 event.start,
@@ -1280,11 +1250,10 @@ function showAllEventsFromToday() {
                                             )}
                                             </div>
                                             <div class="w100">
-                                                <span class="event-date">${formatDateTime(
-                                                    event.start
-                                                )} - ${formatDateTime(
-                                        event.end
-                                    )}</span><br>
+                                                <span class="event-date">${formatEventDates(
+                                                    event.start,
+                                                    event.end
+                                                )}</span><br>
                                                 <span class="event-title">${
                                                     event.title
                                                 }</span>
@@ -1302,92 +1271,106 @@ function showAllEventsFromToday() {
         contentElement.innerHTML = allEventsHTML;
     }
 }
+function formatEventDates(startStr, endStr) {
+    const formatDatePart = (date) => {
+        const optionsDate = {
+            weekday: "short",
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+        };
+        const parts = new Intl.DateTimeFormat(
+            "en-US",
+            optionsDate
+        ).formatToParts(date);
+        const dayOfWeek = parts.find((p) => p.type === "weekday").value;
+        const dayOfMonth = parts.find((p) => p.type === "day").value;
+        const month = parts.find((p) => p.type === "month").value;
+        const year = parts.find((p) => p.type === "year").value;
+        return `${dayOfWeek}, ${dayOfMonth} ${month}, ${year}`;
+    };
 
-// New function to show event detail modal
-function showEventDetail(eventElement) {
-    const eventId = eventElement.dataset.eventId;
-    const eventName = eventElement.dataset.eventName;
-    const eventTitle = eventElement.dataset.eventTitle;
-    const eventStart = eventElement.dataset.eventStart;
-    const eventEnd = eventElement.dataset.eventEnd;
+    const formatTimePart = (date) => {
+        const optionsTime = {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+        };
+        return new Intl.DateTimeFormat("en-US", optionsTime).format(date);
+    };
+    const startDate = new Date(startStr.replace(" ", "T"));
+    const endDate = new Date(endStr.replace(" ", "T"));
 
-    // Calculate duration
-    const startDate = new Date(eventStart);
-    const endDate = new Date(eventEnd);
-    const durationMs = endDate - startDate;
-    const durationHours = Math.floor(durationMs / (1000 * 60 * 60));
-    const durationMinutes = Math.floor(
-        (durationMs % (1000 * 60 * 60)) / (1000 * 60)
-    );
-
-    let durationText = "";
-    if (durationHours > 0) {
-        durationText = `${durationHours}h ${durationMinutes}m`;
-    } else {
-        durationText = `${durationMinutes}m`;
+    if (isNaN(startDate) || isNaN(endDate)) {
+        return "Error: Invalid Date/Time Input";
     }
+    const isMultiDay =
+        startDate.toLocaleDateString() !== endDate.toLocaleDateString();
 
-    // Check if it's a multi-day event
-    const startDateStr = eventStart.split(" ")[0];
-    const endDateStr = eventEnd.split(" ")[0];
-    const isMultiDay = startDateStr !== endDateStr;
+    const startFullDatePart = formatDatePart(startDate);
+    const startFullTimePart = formatTimePart(startDate);
+    const endFullDatePart = formatDatePart(endDate);
+    const endFullTimePart = formatTimePart(endDate);
+
+    if (isMultiDay) {
+        const startFull = `${startFullDatePart} at ${startFullTimePart}`;
+        const endFull = `${endFullDatePart} at ${endFullTimePart}`;
+
+        return `<span class="nobreak">${startFull} -</span>
+                <span class="nobreak">${endFull}</span>`;
+    } else {
+        const endTimeDot = endFullTimePart.replace(":", ".");
+
+        return `<span class="nobreak">${startFullDatePart}</span>
+                <span class="nobreak"> at ${startFullTimePart} - ${endTimeDot}</span>`;
+    }
+}
+
+//Function to show event detail modal
+function showEventDetail(event) {
+    console.log("Showing details for event:", event);
 
     // Update modal content
-    const modalCategory = document.getElementById("modalEventCategory");
     const modalTitle = document.getElementById("modalEventTitle");
-    const modalTime = document.getElementById("modalEventTime");
-    const modalDate = document.getElementById("modalEventDate");
-    const modalDuration = document.getElementById("modalEventDuration");
-
-    // Set category with appropriate styling
-    modalCategory.textContent = eventName.toUpperCase();
-    modalCategory.className = `event-detail-category ${eventName}`;
 
     // Set title
-    modalTitle.textContent = eventTitle;
-
-    // Set time
-    if (isMultiDay) {
-        modalTime.textContent = `${formatTime(eventStart)} - ${formatTime(
-            eventEnd
-        )}`;
-    } else {
-        modalTime.textContent = `${formatTime(eventStart)} - ${formatTime(
-            eventEnd
-        )}`;
-    }
-
-    // Set date
-    if (isMultiDay) {
-        modalDate.textContent = `${formatDateForDisplay(
-            startDateStr
-        )} - ${formatDateForDisplay(endDateStr)}`;
-    } else {
-        modalDate.textContent = formatDateForDisplay(startDateStr);
-    }
-
-    // Set duration
-    if (isMultiDay) {
-        const days = Math.ceil(durationMs / (1000 * 60 * 60 * 24));
-        modalDuration.textContent = `${days} day${days > 1 ? "s" : ""}`;
-    } else {
-        modalDuration.textContent = durationText;
-    }
+    modalTitle.textContent = event.title;
 
     // Show the modal
     const modal = new bootstrap.Modal(
         document.getElementById("eventDetailModal")
     );
+    const eventDateElement = document.getElementById("modalEventDate");
+    const eventTypeElement = document.getElementById("modalEventType");
+    const eventDescElement = document.getElementById("modalEventDesc");
+    const eventOrganizerElement = document.getElementById(
+        "modalEventOrganizer"
+    );
+    eventDateElement.innerHTML = formatEventDates(event.start, event.end);
+    eventTypeElement.innerHTML = event.event_type;
+    eventDescElement.innerHTML = makeUrlsClickable(event.description);
+    if (event.isCampus === "false") {
+        eventOrganizerElement.innerHTML = `
+        <span class="badge organizer-badge badge-red">PPI Malaysia</span>
+        <span class="badge organizer-badge badge-neutral">${event.name}</span>`;
+    } else {
+        eventOrganizerElement.innerHTML = `<span class="badge organizer-badge badge-neutral">${event.name}</span>`;
+    }
     modal.show();
 }
 
-// Hide loading when page loads
+function makeUrlsClickable(descriptionElement) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    return descriptionElement.replace(urlRegex, (url) => {
+        return `<a href="${url}" class="url" target="_blank" rel="noopener noreferrer">${url}</a>`;
+    });
+}
+
 window.addEventListener("load", function () {
     setTimeout(hideLoading, 1000);
-    //time: 500
 });
 setTimeout(hideLoading, 5000);
-//time:
 
 // When DOM loaded
 document.addEventListener("DOMContentLoaded", () => {

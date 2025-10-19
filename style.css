@@ -142,11 +142,11 @@ body::after {
 }
 
 .event-detail-title {
-    font-size: 24px;
-    font-weight: 700;
+    font-size: clamp(20px, 2.2vw, 28px);
+    font-weight: 600;
     color: #1f2937;
-    margin-bottom: 20px;
     line-height: 1.3;
+    margin-bottom: 10px;
 }
 
 .event-detail-time {
@@ -163,20 +163,33 @@ body::after {
     font-size: 18px;
 }
 
-.event-detail-date {
+.event-detail-date,
+.event-detail-organizer {
     display: flex;
     align-items: center;
-    margin-bottom: 12px;
     font-size: 16px;
     color: #374151;
 }
-
-.event-detail-date::before {
-    content: "📅";
-    margin-right: 8px;
-    font-size: 18px;
+.event-detail-organizer {
+    margin-bottom: 5px;
+    gap: 6px;
 }
-
+.detail-icon {
+    font-size: 20px;
+}
+.detail-icon-continer {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+.detail-icon {
+}
+.nobreak {
+    white-space: nowrap;
+}
 .event-detail-duration {
     display: flex;
     align-items: center;
@@ -184,7 +197,14 @@ body::after {
     font-size: 16px;
     color: #6b7280;
 }
-
+.event-detail-description {
+    white-space: pre-wrap;
+}
+.url {
+    color: #da6066;
+    text-decoration: underline;
+    font-weight: 600;
+}
 .event-detail-duration::before {
     content: "⏱️";
     margin-right: 8px;
@@ -1136,6 +1156,7 @@ body::after {
     width: 100%;
     height: 240px;
     margin-bottom: 20px;
+    cursor: pointer;
 }
 .badge-neutral {
     color: #6b7280 !important;

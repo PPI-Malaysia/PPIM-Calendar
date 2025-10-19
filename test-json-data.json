@@ -290,7 +290,7 @@
             },
             {
                 "id": "103",
-                "name": "kelembagaan",
+                "name": "PPIUM",
                 "title": "FORHEAR",
                 "description": "",
                 "start": "2025-05-30 04:00:00",
@@ -298,7 +298,7 @@
                 "event_type": "offline",
                 "created_at": "2025-05-21 14:48:25",
                 "updated_at": "2025-10-19 01:50:40",
-                "isCampus": "false"
+                "isCampus": "true"
             },
             {
                 "id": "121",
@@ -327,7 +327,7 @@
             {
                 "id": "44",
                 "name": "kelembagaan",
-                "title": "Ngariung PPIM 2024\/2025",
+                "title": "Ngariung PPIM 2024/2025",
                 "description": "",
                 "start": "2025-06-08 13:00:00",
                 "end": "2025-06-09 02:00:00",
@@ -916,7 +916,7 @@
                 "id": "113",
                 "name": "kelembagaan",
                 "title": "Latihan Dasar Organisasi",
-                "description": "",
+                "description": "-",
                 "start": "2025-10-19 04:00:00",
                 "end": "2025-10-19 16:00:00",
                 "event_type": "offline",
@@ -926,15 +926,15 @@
             },
             {
                 "id": "160",
-                "name": "pusdatin",
+                "name": "XMUM",
                 "title": "test event",
-                "description": "CCUS: Teknologi Perantara yang Terlupakan\n\nTeknologi Carbon Capture, Utilization, and Storage (CCUS) seharusnya menjadi jembatan transisi penting. CCUS mampu menangkap dan menyimpan karbon di bawah tanah. Di Indonesia, teknologi ini bisa memanfaatkan potensi geologi seperti batu pasir dan lapangan migas tua. Selain mengurangi emisi, CCUS juga bisa membantu meningkatkan produksi minyak lewat metode enhanced oil recovery. Meski masih dalam tahap pengembangan dan membutuhkan energi besar, CO\u2082 yang ditangkap dapat dikonversi menjadi bahan bakar sintetis dengan hidrogen hijau, membuka peluang ekonomi karbon sirkular di masa depan.",
+                "description": "CCUS: Teknologi Perantara yang Terlupakan\n\nTeknologi Carbon Capture, Utilization, and Storage (CCUS) seharusnya menjadi jembatan transisi penting. CCUS mampu menangkap dan menyimpan karbon di bawah tanah. Di Indonesia, teknologi ini bisa memanfaatkan potensi geologi seperti batu pasir dan lapangan migas tua. Selain mengurangi emisi, CCUS juga bisa membantu meningkatkan produksi minyak lewat metode enhanced oil recovery. Meski masih dalam tahap pengembangan dan membutuhkan energi besar, CO\u2082 yang ditangkap dapat dikonversi menjadi bahan bakar sintetis dengan hidrogen hijau, membuka peluang ekonomi karbon sirkular di masa depan.\n\nDaftar sekarang:\nhttp://rafidaffa.com",
                 "start": "2025-10-19 05:14:00",
                 "end": "2025-10-20 05:14:00",
                 "event_type": "online",
                 "created_at": "2025-10-19 05:14:23",
                 "updated_at": "2025-10-19 05:14:23",
-                "isCampus": "false"
+                "isCampus": "true"
             },
             {
                 "id": "108",
@@ -976,7 +976,7 @@
                 "id": "151",
                 "name": "kelembagaan",
                 "title": "Latihan Dasar Organisasi",
-                "description": "",
+                "description": "-",
                 "start": "2025-11-07 05:00:00",
                 "end": "2025-11-10 04:59:00",
                 "event_type": "offline",
@@ -1134,7 +1134,7 @@
                 "id": "160",
                 "name": "pusdatin",
                 "title": "test event",
-                "description": "CCUS: Teknologi Perantara yang Terlupakan\n\nTeknologi Carbon Capture, Utilization, and Storage (CCUS) seharusnya menjadi jembatan transisi penting. CCUS mampu menangkap dan menyimpan karbon di bawah tanah. Di Indonesia, teknologi ini bisa memanfaatkan potensi geologi seperti batu pasir dan lapangan migas tua. Selain mengurangi emisi, CCUS juga bisa membantu meningkatkan produksi minyak lewat metode enhanced oil recovery. Meski masih dalam tahap pengembangan dan membutuhkan energi besar, CO\u2082 yang ditangkap dapat dikonversi menjadi bahan bakar sintetis dengan hidrogen hijau, membuka peluang ekonomi karbon sirkular di masa depan.",
+                "description": "CCUS: Teknologi Perantara yang Terlupakan\n\nTeknologi Carbon Capture, Utilization, and Storage (CCUS) seharusnya menjadi jembatan transisi penting. CCUS mampu menangkap dan menyimpan karbon di bawah tanah. Di Indonesia, teknologi ini bisa memanfaatkan potensi geologi seperti batu pasir dan lapangan migas tua. Selain mengurangi emisi, CCUS juga bisa membantu meningkatkan produksi minyak lewat metode enhanced oil recovery. Meski masih dalam tahap pengembangan dan membutuhkan energi besar, CO\u2082 yang ditangkap dapat dikonversi menjadi bahan bakar sintetis dengan hidrogen hijau, membuka peluang ekonomi karbon sirkular di masa depan.\n\nDaftar sekarang:\nhttps://rafidaffa.com",
                 "start": "2025-10-19 05:14:00",
                 "end": "2025-10-20 05:14:00",
                 "event_type": "online",
